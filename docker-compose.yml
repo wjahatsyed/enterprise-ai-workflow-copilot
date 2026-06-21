@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: aiworkflow-postgres
+    environment:
+      POSTGRES_DB: aiworkflow
+      POSTGRES_USER: aiworkflow
+      POSTGRES_PASSWORD: aiworkflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - aiworkflow_postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: aiworkflow-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  aiworkflow_postgres_data:
