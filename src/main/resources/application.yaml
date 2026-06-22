@@ -14,6 +14,8 @@ spring:
 
   flyway:
     enabled: true
+    repair-on-migrate: true
+    validate-on-migrate: false
 
 server:
   port: 8080
