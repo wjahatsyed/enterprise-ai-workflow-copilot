@@ -25,3 +25,7 @@ management:
     web:
       exposure:
         include: health,info,metrics
+
+openai:
+  api-key: ${OPENAI_API_KEY:}
+  embedding-model: text-embedding-3-small

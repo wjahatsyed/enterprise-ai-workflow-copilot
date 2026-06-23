@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -23,4 +25,11 @@ public class DocumentChunk extends BaseEntity {
 
     @Column(nullable = false)
     private Integer tokenEstimate;
+
+    @Column(columnDefinition = "jsonb")
+    private String embedding;
+
+    private String embeddingModel;
+
+    private LocalDateTime embeddedAt;
 }

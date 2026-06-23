@@ -1,4 +1,6 @@
-CREATE TABLE IF NOT EXISTS workspace_members (
+DROP TABLE IF EXISTS workspace_members;
+
+CREATE TABLE workspace_members (
     id UUID PRIMARY KEY,
     workspace_id UUID NOT NULL REFERENCES workspaces(id),
     user_id UUID NOT NULL REFERENCES app_users(id),
