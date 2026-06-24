@@ -2,6 +2,9 @@ package com.wajahat.aiworkflow.workflow;
 
 import com.wajahat.aiworkflow.workspace.Workspace;
 import com.wajahat.aiworkflow.workspace.WorkspaceRepository;
+import com.wajahat.aiworkflow.agent.AgentService;
+import com.wajahat.aiworkflow.agent.AskAgentResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +21,8 @@ public class WorkflowService {
     private final WorkflowStepRepository stepRepository;
     private final WorkflowRunRepository runRepository;
     private final WorkflowStepRunRepository stepRunRepository;
+    private final ObjectMapper objectMapper;
+    private final AgentService agentService;
 
     @Transactional
     public WorkflowResponse create(UUID workspaceId, CreateWorkflowRequest request) {
@@ -161,17 +166,50 @@ public class WorkflowService {
     private String executeStep(WorkflowStep step, String inputJson) {
         return switch (step.getType()) {
             case MANUAL_TASK -> """
-                    {"status":"manual_task_recorded","input":%s}
-                    """.formatted(inputJson);
+                {"status":"manual_task_recorded","input":%s}
+                """.formatted(inputJson);
 
             case HUMAN_APPROVAL -> """
-                    {"status":"waiting_for_human_approval","input":%s}
-                    """.formatted(inputJson);
+                {"status":"waiting_for_human_approval","input":%s}
+                """.formatted(inputJson);
 
-            case AI_AGENT -> """
-                    {"status":"ai_agent_step_placeholder","stepName":"%s","input":%s}
-                    """.formatted(step.getName(), inputJson);
+            case AI_AGENT -> executeAiAgentStep(step, inputJson);
         };
+    }
+
+    private String executeAiAgentStep(WorkflowStep step, String inputJson) {
+        try {
+            AiAgentStepConfig config =
+                    objectMapper.readValue(step.getConfigJson(), AiAgentStepConfig.class);
+
+            if (config.agentId() == null) {
+                throw new IllegalArgumentException("AI_AGENT step requires agentId in configJson");
+            }
+
+            String question = buildAgentQuestion(config.promptTemplate(), inputJson);
+
+            AskAgentResponse response = agentService.askFromWorkflow(
+                    config.agentId(),
+                    question
+            );
+
+            return """
+                {"status":"ai_agent_completed","conversationId":"%s","answer":%s}
+                """.formatted(
+                    response.conversationId(),
+                    objectMapper.writeValueAsString(response.answer())
+            );
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to execute AI agent step: " + e.getMessage(), e);
+        }
+    }
+
+    private String buildAgentQuestion(String promptTemplate, String inputJson) {
+        if (promptTemplate == null || promptTemplate.isBlank()) {
+            return "Analyze the following workflow input and provide the next best action:\n" + inputJson;
+        }
+
+        return promptTemplate.replace("{{input}}", inputJson);
     }
 
     private WorkflowRunStatus resolveCompletedStatus(WorkflowStep step) {
