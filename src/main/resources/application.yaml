@@ -14,6 +14,8 @@ spring:
 
   flyway:
     enabled: true
+    repair-on-migrate: true
+    validate-on-migrate: false
 
 server:
   port: 8080
@@ -23,3 +25,8 @@ management:
     web:
       exposure:
         include: health,info,metrics
+
+openai:
+  api-key: ${OPENAI_API_KEY:}
+  embedding-model: text-embedding-3-small
+  chat-model: gpt-4.1-mini
