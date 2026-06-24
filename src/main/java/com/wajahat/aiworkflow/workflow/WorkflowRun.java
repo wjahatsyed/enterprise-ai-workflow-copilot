@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -24,4 +26,14 @@ public class WorkflowRun extends BaseEntity {
 
     @Column(columnDefinition = "jsonb")
     private String outputJson;
+
+    @Enumerated(EnumType.STRING)
+    private ApprovalStatus approvalStatus;
+
+    private String approvedBy;
+
+    private LocalDateTime approvedAt;
+
+    @Column(columnDefinition = "TEXT")
+    private String rejectionReason;
 }
