@@ -107,6 +107,11 @@ public class AgentService {
         return message;
     }
 
+    @Transactional
+    public AskAgentResponse askFromWorkflow(UUID agentId, String question) {
+        return ask(agentId, new AskAgentRequest(null, question));
+    }
+
     private String buildContext(List<SearchResultResponse> results) {
         StringBuilder builder = new StringBuilder();
 
