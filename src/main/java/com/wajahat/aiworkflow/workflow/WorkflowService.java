@@ -243,4 +243,70 @@ public class WorkflowService {
                 stepRun.getCompletedAt()
         );
     }
+
+    @Transactional
+    public ApprovalResponse approveRun(
+            UUID runId,
+            ApproveWorkflowRequest request) {
+
+        WorkflowRun run = runRepository.findById(runId)
+                .orElseThrow(() -> new IllegalArgumentException("Run not found"));
+
+        if (run.getStatus() != WorkflowRunStatus.WAITING_FOR_APPROVAL) {
+            throw new IllegalStateException("Run is not waiting for approval");
+        }
+
+        run.setApprovalStatus(ApprovalStatus.APPROVED);
+        run.setApprovedBy(request.approvedBy());
+        run.setApprovedAt(LocalDateTime.now());
+
+        run.setStatus(WorkflowRunStatus.COMPLETED);
+
+        runRepository.save(run);
+
+        return toApprovalResponse(run);
+    }
+
+    @Transactional
+    public ApprovalResponse rejectRun(
+            UUID runId,
+            RejectWorkflowRequest request) {
+
+        WorkflowRun run = runRepository.findById(runId)
+                .orElseThrow(() -> new IllegalArgumentException("Run not found"));
+
+        if (run.getStatus() != WorkflowRunStatus.WAITING_FOR_APPROVAL) {
+            throw new IllegalStateException("Run is not waiting for approval");
+        }
+
+        run.setApprovalStatus(ApprovalStatus.REJECTED);
+        run.setApprovedBy(request.rejectedBy());
+        run.setApprovedAt(LocalDateTime.now());
+        run.setRejectionReason(request.reason());
+
+        run.setStatus(WorkflowRunStatus.FAILED);
+
+        runRepository.save(run);
+
+        return toApprovalResponse(run);
+    }
+
+    public ApprovalResponse getApproval(UUID runId) {
+
+        WorkflowRun run = runRepository.findById(runId)
+                .orElseThrow(() -> new IllegalArgumentException("Run not found"));
+
+        return toApprovalResponse(run);
+    }
+
+    private ApprovalResponse toApprovalResponse(WorkflowRun run) {
+        return new ApprovalResponse(
+                run.getId(),
+                run.getApprovalStatus(),
+                run.getApprovedBy(),
+                run.getApprovedAt(),
+                run.getRejectionReason()
+        );
+    }
 }
+

@@ -42,4 +42,27 @@ public class WorkflowController {
     public WorkflowRunResponse findRunById(@PathVariable UUID runId) {
         return workflowService.findRunById(runId);
     }
+
+    @GetMapping("/api/workflow-runs/{runId}/approval")
+    public ApprovalResponse getApproval(
+            @PathVariable UUID runId) {
+
+        return workflowService.getApproval(runId);
+    }
+
+    @PostMapping("/api/workflow-runs/{runId}/approve")
+    public ApprovalResponse approve(
+            @PathVariable UUID runId,
+            @Valid @RequestBody ApproveWorkflowRequest request) {
+
+        return workflowService.approveRun(runId, request);
+    }
+
+    @PostMapping("/api/workflow-runs/{runId}/reject")
+    public ApprovalResponse reject(
+            @PathVariable UUID runId,
+            @Valid @RequestBody RejectWorkflowRequest request) {
+
+        return workflowService.rejectRun(runId, request);
+    }
 }
