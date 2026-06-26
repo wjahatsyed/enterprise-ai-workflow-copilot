@@ -18,7 +18,6 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @SpringJUnitConfig(classes = {
         AsyncConfig.class,
-        DomainEventPublisher.class,
         DomainEventListener.class,
         DomainEventAsyncProcessingTest.TestConfig.class
 })
@@ -29,7 +28,7 @@ class DomainEventAsyncProcessingTest {
     private static final AtomicReference<String> handlerThreadName = new AtomicReference<>();
 
     @Autowired
-    private DomainEventPublisher publisher;
+    private org.springframework.context.ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
     void setUp() {
@@ -38,7 +37,7 @@ class DomainEventAsyncProcessingTest {
     }
 
     @Test
-    void publishShouldProcessMatchingHandlersOnDomainEventExecutor() throws Exception {
+    void springDomainEventShouldProcessMatchingHandlersOnDomainEventExecutor() throws Exception {
         DomainEvent event = DomainEvent.of(
                 DomainEventType.WORKFLOW_STARTED,
                 UUID.randomUUID(),
@@ -46,7 +45,7 @@ class DomainEventAsyncProcessingTest {
                 Map.of()
         );
 
-        publisher.publish(event);
+        applicationEventPublisher.publishEvent(event);
 
         assertThat(handled.await(2, TimeUnit.SECONDS)).isTrue();
         assertThat(handlerThreadName.get()).startsWith("domain-event-");

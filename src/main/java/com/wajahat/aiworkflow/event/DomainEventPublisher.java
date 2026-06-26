@@ -1,16 +1,15 @@
 package com.wajahat.aiworkflow.event;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class DomainEventPublisher {
 
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private final OutboxEventService outboxEventService;
 
     public void publish(DomainEvent event) {
-        applicationEventPublisher.publishEvent(event);
+        outboxEventService.save(event);
     }
 }
