@@ -13,6 +13,9 @@ import com.wajahat.aiworkflow.action.ActionType;
 import com.wajahat.aiworkflow.agent.AgentService;
 import com.wajahat.aiworkflow.agent.AskAgentResponse;
 import com.wajahat.aiworkflow.event.DomainEventPublisher;
+import com.wajahat.aiworkflow.tenant.Tenant;
+import com.wajahat.aiworkflow.tenant.TenantContext;
+import com.wajahat.aiworkflow.workspace.Workspace;
 import com.wajahat.aiworkflow.workspace.WorkspaceRepository;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +58,7 @@ class WorkflowServiceTest {
 
     @BeforeEach
     void setUp() {
+        TenantContext.clear();
         workflowService = new WorkflowService(
                 workspaceRepository,
                 workflowRepository,
@@ -70,8 +74,10 @@ class WorkflowServiceTest {
 
     @Test
     void approveRunShouldContinueRemainingStepsAfterHumanApproval() {
+        UUID tenantId = UUID.randomUUID();
+        TenantContext.setTenantId(tenantId);
         UUID runId = UUID.randomUUID();
-        Workflow workflow = workflow();
+        Workflow workflow = workflow(tenantId);
         WorkflowRun run = waitingForApprovalRun(runId, workflow);
         WorkflowStep aiStep = step(workflow, 1, WorkflowStepType.AI_AGENT, "{}");
         WorkflowStep approvalStep = step(workflow, 2, WorkflowStepType.HUMAN_APPROVAL, "{}");
@@ -88,7 +94,7 @@ class WorkflowServiceTest {
                 "{\"status\":\"waiting_for_human_approval\"}"
         );
 
-        when(runRepository.findById(runId)).thenReturn(Optional.of(run));
+        when(runRepository.findByIdAndWorkflowWorkspaceTenantId(runId, tenantId)).thenReturn(Optional.of(run));
         when(stepRunRepository.findByWorkflowRunIdOrderByCreatedAtAsc(runId))
                 .thenReturn(List.of(aiStepRun, approvalStepRun));
         when(stepRepository.findByWorkflowIdOrderByStepOrderAsc(workflow.getId()))
@@ -110,8 +116,10 @@ class WorkflowServiceTest {
 
     @Test
     void approveRunShouldWaitAgainWhenNextRemainingStepRequiresApproval() {
+        UUID tenantId = UUID.randomUUID();
+        TenantContext.setTenantId(tenantId);
         UUID runId = UUID.randomUUID();
-        Workflow workflow = workflow();
+        Workflow workflow = workflow(tenantId);
         WorkflowRun run = waitingForApprovalRun(runId, workflow);
         WorkflowStep firstApprovalStep = step(workflow, 1, WorkflowStepType.HUMAN_APPROVAL, "{}");
         WorkflowStep secondApprovalStep = step(workflow, 2, WorkflowStepType.HUMAN_APPROVAL, "{}");
@@ -121,7 +129,7 @@ class WorkflowServiceTest {
                 "{\"status\":\"waiting_for_human_approval\"}"
         );
 
-        when(runRepository.findById(runId)).thenReturn(Optional.of(run));
+        when(runRepository.findByIdAndWorkflowWorkspaceTenantId(runId, tenantId)).thenReturn(Optional.of(run));
         when(stepRunRepository.findByWorkflowRunIdOrderByCreatedAtAsc(runId))
                 .thenReturn(List.of(approvalStepRun));
         when(stepRepository.findByWorkflowIdOrderByStepOrderAsc(workflow.getId()))
@@ -139,10 +147,12 @@ class WorkflowServiceTest {
 
     @Test
     void rejectRunShouldRemainFailedAndNotContinueWorkflow() {
+        UUID tenantId = UUID.randomUUID();
+        TenantContext.setTenantId(tenantId);
         UUID runId = UUID.randomUUID();
-        WorkflowRun run = waitingForApprovalRun(runId, workflow());
+        WorkflowRun run = waitingForApprovalRun(runId, workflow(tenantId));
 
-        when(runRepository.findById(runId)).thenReturn(Optional.of(run));
+        when(runRepository.findByIdAndWorkflowWorkspaceTenantId(runId, tenantId)).thenReturn(Optional.of(run));
 
         ApprovalResponse response = workflowService.rejectRun(
                 runId,
@@ -154,8 +164,13 @@ class WorkflowServiceTest {
         verify(stepRepository, never()).findByWorkflowIdOrderByStepOrderAsc(any());
     }
 
-    private Workflow workflow() {
+    private Workflow workflow(UUID tenantId) {
+        Tenant tenant = new Tenant();
+        tenant.setId(tenantId);
+        Workspace workspace = new Workspace();
+        workspace.setTenant(tenant);
         Workflow workflow = new Workflow();
+        workflow.setWorkspace(workspace);
         workflow.setName("Contract review");
         workflow.setStatus(WorkflowStatus.ACTIVE);
         return workflow;

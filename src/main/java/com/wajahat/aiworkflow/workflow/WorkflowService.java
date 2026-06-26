@@ -1,5 +1,6 @@
 package com.wajahat.aiworkflow.workflow;
 
+import com.wajahat.aiworkflow.tenant.TenantContext;
 import com.wajahat.aiworkflow.workspace.Workspace;
 import com.wajahat.aiworkflow.workspace.WorkspaceRepository;
 import com.wajahat.aiworkflow.agent.AgentService;
@@ -35,7 +36,7 @@ public class WorkflowService {
 
     @Transactional
     public WorkflowResponse create(UUID workspaceId, CreateWorkflowRequest request) {
-        Workspace workspace = workspaceRepository.findById(workspaceId)
+        Workspace workspace = workspaceRepository.findByIdAndTenantId(workspaceId, TenantContext.getTenantId())
                 .orElseThrow(() -> new IllegalArgumentException("Workspace not found"));
 
         Workflow workflow = new Workflow();
@@ -63,14 +64,14 @@ public class WorkflowService {
     }
 
     public List<WorkflowResponse> findByWorkspace(UUID workspaceId) {
-        return workflowRepository.findByWorkspaceId(workspaceId)
+        return workflowRepository.findByWorkspaceIdAndWorkspaceTenantId(workspaceId, TenantContext.getTenantId())
                 .stream()
                 .map(workflow -> findById(workflow.getId()))
                 .toList();
     }
 
     public WorkflowResponse findById(UUID workflowId) {
-        Workflow workflow = workflowRepository.findById(workflowId)
+        Workflow workflow = workflowRepository.findByIdAndWorkspaceTenantId(workflowId, TenantContext.getTenantId())
                 .orElseThrow(() -> new IllegalArgumentException("Workflow not found"));
 
         List<WorkflowStepResponse> steps = stepRepository
@@ -91,7 +92,7 @@ public class WorkflowService {
 
     @Transactional
     public WorkflowRunResponse startRun(UUID workflowId, StartWorkflowRunRequest request) {
-        Workflow workflow = workflowRepository.findById(workflowId)
+        Workflow workflow = workflowRepository.findByIdAndWorkspaceTenantId(workflowId, TenantContext.getTenantId())
                 .orElseThrow(() -> new IllegalArgumentException("Workflow not found"));
 
         WorkflowRun run = new WorkflowRun();
@@ -206,7 +207,7 @@ public class WorkflowService {
     }
 
     public WorkflowRunResponse findRunById(UUID runId) {
-        WorkflowRun run = runRepository.findById(runId)
+        WorkflowRun run = runRepository.findByIdAndWorkflowWorkspaceTenantId(runId, TenantContext.getTenantId())
                 .orElseThrow(() -> new IllegalArgumentException("Workflow run not found"));
 
         List<WorkflowStepRunResponse> stepRuns = stepRunRepository
@@ -330,7 +331,7 @@ public class WorkflowService {
             UUID runId,
             ApproveWorkflowRequest request) {
 
-        WorkflowRun run = runRepository.findById(runId)
+        WorkflowRun run = runRepository.findByIdAndWorkflowWorkspaceTenantId(runId, TenantContext.getTenantId())
                 .orElseThrow(() -> new IllegalArgumentException("Run not found"));
 
         if (run.getStatus() != WorkflowRunStatus.WAITING_FOR_APPROVAL) {
@@ -386,7 +387,7 @@ public class WorkflowService {
             UUID runId,
             RejectWorkflowRequest request) {
 
-        WorkflowRun run = runRepository.findById(runId)
+        WorkflowRun run = runRepository.findByIdAndWorkflowWorkspaceTenantId(runId, TenantContext.getTenantId())
                 .orElseThrow(() -> new IllegalArgumentException("Run not found"));
 
         if (run.getStatus() != WorkflowRunStatus.WAITING_FOR_APPROVAL) {
@@ -417,7 +418,7 @@ public class WorkflowService {
 
     public ApprovalResponse getApproval(UUID runId) {
 
-        WorkflowRun run = runRepository.findById(runId)
+        WorkflowRun run = runRepository.findByIdAndWorkflowWorkspaceTenantId(runId, TenantContext.getTenantId())
                 .orElseThrow(() -> new IllegalArgumentException("Run not found"));
 
         return toApprovalResponse(run);
