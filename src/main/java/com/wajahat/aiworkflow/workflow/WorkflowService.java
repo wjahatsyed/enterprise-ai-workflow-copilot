@@ -7,6 +7,10 @@ import com.wajahat.aiworkflow.agent.AskAgentResponse;
 import com.wajahat.aiworkflow.action.ActionDispatcher;
 import com.wajahat.aiworkflow.action.ActionExecutionResult;
 import com.wajahat.aiworkflow.action.ActionStepConfig;
+import com.wajahat.aiworkflow.event.DomainEvent;
+import com.wajahat.aiworkflow.event.DomainEventPublisher;
+import com.wajahat.aiworkflow.event.DomainEventType;
+import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +31,7 @@ public class WorkflowService {
     private final ObjectMapper objectMapper;
     private final AgentService agentService;
     private final ActionDispatcher actionDispatcher;
+    private final DomainEventPublisher eventPublisher;
 
     @Transactional
     public WorkflowResponse create(UUID workspaceId, CreateWorkflowRequest request) {
@@ -96,6 +101,16 @@ public class WorkflowService {
 
         WorkflowRun savedRun = runRepository.save(run);
 
+        eventPublisher.publish(DomainEvent.of(
+                DomainEventType.WORKFLOW_STARTED,
+                savedRun.getId(),
+                "WorkflowRun",
+                Map.of(
+                        "workflowId", workflow.getId().toString(),
+                        "workflowName", workflow.getName()
+                )
+        ));
+
         List<WorkflowStep> steps = stepRepository.findByWorkflowIdOrderByStepOrderAsc(workflowId);
 
         String currentInput = request.inputJson();
@@ -117,10 +132,35 @@ public class WorkflowService {
 
                 stepRunRepository.save(stepRun);
 
+                eventPublisher.publish(DomainEvent.of(
+                        DomainEventType.WORKFLOW_STEP_COMPLETED,
+                        savedRun.getId(),
+                        "WorkflowRun",
+                        Map.of(
+                                "stepId", step.getId().toString(),
+                                "stepName", step.getName(),
+                                "stepType", step.getType().name(),
+                                "status", stepRun.getStatus().name()
+                        )
+                ));
+
                 if (step.getType() == WorkflowStepType.HUMAN_APPROVAL) {
+                    savedRun.setApprovalStatus(ApprovalStatus.PENDING);
                     savedRun.setStatus(WorkflowRunStatus.WAITING_FOR_APPROVAL);
                     savedRun.setOutputJson(output);
                     runRepository.save(savedRun);
+
+                    eventPublisher.publish(DomainEvent.of(
+                            DomainEventType.APPROVAL_REQUESTED,
+                            savedRun.getId(),
+                            "WorkflowRun",
+                            Map.of(
+                                    "workflowId", workflow.getId().toString(),
+                                    "stepId", step.getId().toString(),
+                                    "stepName", step.getName()
+                            )
+                    ));
+
                     return findRunById(savedRun.getId());
                 }
 
@@ -131,6 +171,18 @@ public class WorkflowService {
                 stepRun.setErrorMessage(e.getMessage());
                 stepRun.setCompletedAt(LocalDateTime.now());
                 stepRunRepository.save(stepRun);
+
+                eventPublisher.publish(DomainEvent.of(
+                        DomainEventType.WORKFLOW_STEP_COMPLETED,
+                        savedRun.getId(),
+                        "WorkflowRun",
+                        Map.of(
+                                "stepId", step.getId().toString(),
+                                "stepName", step.getName(),
+                                "stepType", step.getType().name(),
+                                "status", stepRun.getStatus().name()
+                        )
+                ));
 
                 savedRun.setStatus(WorkflowRunStatus.FAILED);
                 savedRun.setOutputJson(finalOutput);
@@ -287,6 +339,15 @@ public class WorkflowService {
 
         runRepository.save(run);
 
+        eventPublisher.publish(DomainEvent.of(
+                DomainEventType.APPROVAL_APPROVED,
+                run.getId(),
+                "WorkflowRun",
+                Map.of(
+                        "approvedBy", request.approvedBy()
+                )
+        ));
+
         return toApprovalResponse(run);
     }
 
@@ -310,6 +371,16 @@ public class WorkflowService {
         run.setStatus(WorkflowRunStatus.FAILED);
 
         runRepository.save(run);
+
+        eventPublisher.publish(DomainEvent.of(
+                DomainEventType.APPROVAL_REJECTED,
+                run.getId(),
+                "WorkflowRun",
+                Map.of(
+                        "rejectedBy", request.rejectedBy(),
+                        "reason", request.reason()
+                )
+        ));
 
         return toApprovalResponse(run);
     }
