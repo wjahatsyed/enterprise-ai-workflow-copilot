@@ -113,9 +113,15 @@ public class WorkflowService {
 
         List<WorkflowStep> steps = stepRepository.findByWorkflowIdOrderByStepOrderAsc(workflowId);
 
-        String currentInput = request.inputJson();
-        String finalOutput = currentInput;
+        return continueRun(savedRun, steps, request.inputJson());
+    }
 
+    private WorkflowRunResponse continueRun(
+            WorkflowRun savedRun,
+            List<WorkflowStep> steps,
+            String currentInput
+    ) {
+        String finalOutput = currentInput;
         for (WorkflowStep step : steps) {
             WorkflowStepRun stepRun = new WorkflowStepRun();
             stepRun.setWorkflowRun(savedRun);
@@ -155,7 +161,7 @@ public class WorkflowService {
                             savedRun.getId(),
                             "WorkflowRun",
                             Map.of(
-                                    "workflowId", workflow.getId().toString(),
+                                    "workflowId", savedRun.getWorkflow().getId().toString(),
                                     "stepId", step.getId().toString(),
                                     "stepName", step.getName()
                             )
@@ -335,7 +341,7 @@ public class WorkflowService {
         run.setApprovedBy(request.approvedBy());
         run.setApprovedAt(LocalDateTime.now());
 
-        run.setStatus(WorkflowRunStatus.COMPLETED);
+        run.setStatus(WorkflowRunStatus.RUNNING);
 
         runRepository.save(run);
 
@@ -348,7 +354,31 @@ public class WorkflowService {
                 )
         ));
 
+        WorkflowStepRun approvalStepRun = findLastStepRun(run);
+        if (approvalStepRun.getWorkflowStep().getType() != WorkflowStepType.HUMAN_APPROVAL) {
+            throw new IllegalStateException("Last workflow step run is not waiting for approval");
+        }
+
+        List<WorkflowStep> remainingSteps = stepRepository
+                .findByWorkflowIdOrderByStepOrderAsc(run.getWorkflow().getId())
+                .stream()
+                .filter(step -> step.getStepOrder() > approvalStepRun.getWorkflowStep().getStepOrder())
+                .toList();
+
+        continueRun(run, remainingSteps, run.getOutputJson());
+
         return toApprovalResponse(run);
+    }
+
+    private WorkflowStepRun findLastStepRun(WorkflowRun run) {
+        List<WorkflowStepRun> stepRuns = stepRunRepository
+                .findByWorkflowRunIdOrderByCreatedAtAsc(run.getId());
+
+        if (stepRuns.isEmpty()) {
+            throw new IllegalStateException("No workflow step runs found for approval");
+        }
+
+        return stepRuns.get(stepRuns.size() - 1);
     }
 
     @Transactional
