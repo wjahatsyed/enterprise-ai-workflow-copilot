@@ -1,14 +1,16 @@
 ## Summary
 
-- Add API Key authentication as alternative to JWT for programmatic access.
-- Introduce `ApiKey` entity, `ApiKeyRepository`, and `ApiKeyService` with SHA-256 hashing for secure key storage.
-- Add `ApiKeyAuthenticationFilter` to validate and authenticate requests using `X-API-Key` header.
-- Implement outbox pattern for reliable domain event publishing with `OutboxEvent`, `OutboxEventService`, and `OutboxEventProcessor`.
-- Add `TenantContext` and `TenantFilter` for tenant isolation across authenticated requests.
-- Update security configuration to support stateless authentication with JWT, API Key, and tenant context filters.
-- Add `@PreAuthorize` annotations across all endpoints (`TenantController`, `AppUserController`, `WorkspaceController`, `WorkspaceMemberController`, `DocumentController`, `SearchController`, `AgentController`, `WorkflowController`, `EmbeddingController`) for role-based access control with `TENANT_ADMIN` and `MEMBER` roles.
-- Enable method security and update repositories to support tenant-scoped queries across workflows, runs, and workspaces.
-- Update tests with security configurations and add comprehensive test coverage for API key authentication, JWT token generation/validation, and role-based access control.
+- Add comprehensive test dependencies for Spring Boot starters including actuator, data-jpa, flyway, security, validation, webflux, and webmvc testing.
+- Implement input validation with `@Valid` and `@NotNull` annotations across all request DTOs and entity models.
+- Add exception handling and custom error responses for validation failures and business logic violations.
+- Enhance database migration robustness with improved Flyway configuration and test utilities.
+- Implement health checks and readiness probes using Spring Boot Actuator endpoints.
+- Add retry logic and circuit breaker patterns for external API calls (OpenAI) to improve resilience.
+- Implement request/response logging filters for debugging and audit trails.
+- Add comprehensive null-safety checks and defensive programming practices throughout services.
+- Implement proper transaction management with `@Transactional` annotations for consistency.
+- Add test coverage for error scenarios, edge cases, and failure handling.
+- Update configuration for graceful shutdown and resource cleanup.
 
 ## Validation
 
@@ -17,4 +19,4 @@
 
 ## Notes
 
-This PR implements API key authentication, tenant isolation, and event-driven architecture patterns to enhance security, multi-tenancy, and system reliability.
+This PR hardens the backend by improving reliability, adding defensive programming practices, comprehensive error handling, and extensive test coverage to ensure system stability in production environments.
