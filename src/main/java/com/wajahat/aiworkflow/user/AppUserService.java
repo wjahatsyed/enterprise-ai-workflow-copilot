@@ -1,6 +1,7 @@
 package com.wajahat.aiworkflow.user;
 
 import com.wajahat.aiworkflow.tenant.Tenant;
+import com.wajahat.aiworkflow.tenant.TenantAccessValidator;
 import com.wajahat.aiworkflow.tenant.TenantRepository;
 import java.util.List;
 import java.util.UUID;
@@ -13,8 +14,10 @@ public class AppUserService {
 
     private final AppUserRepository appUserRepository;
     private final TenantRepository tenantRepository;
+    private final TenantAccessValidator tenantAccessValidator;
 
     public UserResponse create(UUID tenantId, CreateUserRequest request) {
+        tenantAccessValidator.validateTenantId(tenantId);
         Tenant tenant = tenantRepository.findById(tenantId)
                 .orElseThrow(() -> new IllegalArgumentException("Tenant not found"));
 
@@ -32,6 +35,7 @@ public class AppUserService {
     }
 
     public List<UserResponse> findByTenant(UUID tenantId) {
+        tenantAccessValidator.validateTenantId(tenantId);
         return appUserRepository.findByTenantId(tenantId)
                 .stream()
                 .map(this::toResponse)

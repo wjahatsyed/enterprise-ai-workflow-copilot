@@ -1,5 +1,6 @@
 package com.wajahat.aiworkflow.document;
 
+import com.wajahat.aiworkflow.tenant.TenantAccessValidator;
 import com.wajahat.aiworkflow.workspace.Workspace;
 import com.wajahat.aiworkflow.workspace.WorkspaceRepository;
 import java.util.List;
@@ -16,11 +17,13 @@ public class DocumentService {
     private final DocumentRepository documentRepository;
     private final DocumentChunkRepository chunkRepository;
     private final TextChunker textChunker;
+    private final TenantAccessValidator tenantAccessValidator;
 
     @Transactional
     public DocumentResponse create(UUID workspaceId, CreateDocumentRequest request) {
         Workspace workspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow(() -> new IllegalArgumentException("Workspace not found"));
+        tenantAccessValidator.validateWorkspace(workspace);
 
         Document document = new Document();
         document.setWorkspace(workspace);
@@ -51,6 +54,10 @@ public class DocumentService {
     }
 
     public List<DocumentResponse> findByWorkspace(UUID workspaceId) {
+        Workspace workspace = workspaceRepository.findById(workspaceId)
+                .orElseThrow(() -> new IllegalArgumentException("Workspace not found"));
+        tenantAccessValidator.validateWorkspace(workspace);
+
         return documentRepository.findByWorkspaceId(workspaceId)
                 .stream()
                 .map(document -> {
@@ -66,6 +73,7 @@ public class DocumentService {
     public DocumentDetailResponse findById(UUID documentId) {
         Document document = documentRepository.findById(documentId)
                 .orElseThrow(() -> new IllegalArgumentException("Document not found"));
+        tenantAccessValidator.validateDocument(document);
 
         List<DocumentChunkResponse> chunks = chunkRepository
                 .findByDocumentIdOrderByChunkIndexAsc(documentId)

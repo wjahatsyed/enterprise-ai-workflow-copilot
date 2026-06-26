@@ -4,8 +4,11 @@ import com.wajahat.aiworkflow.ai.OpenAiChatClient;
 import com.wajahat.aiworkflow.document.SearchRequest;
 import com.wajahat.aiworkflow.document.SearchResultResponse;
 import com.wajahat.aiworkflow.document.SemanticSearchService;
+import com.wajahat.aiworkflow.tenant.TenantAccessValidator;
 import com.wajahat.aiworkflow.workspace.Workspace;
 import com.wajahat.aiworkflow.workspace.WorkspaceRepository;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,8 @@ public class AgentService {
     private final MessageRepository messageRepository;
     private final SemanticSearchService semanticSearchService;
     private final OpenAiChatClient openAiChatClient;
+    private final MeterRegistry meterRegistry;
+    private final TenantAccessValidator tenantAccessValidator;
 
     @Value("${openai.chat-model}")
     private String defaultChatModel;
@@ -31,6 +36,7 @@ public class AgentService {
     public AgentResponse create(UUID workspaceId, CreateAgentRequest request) {
         Workspace workspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow(() -> new IllegalArgumentException("Workspace not found"));
+        tenantAccessValidator.validateWorkspace(workspace);
 
         Agent agent = new Agent();
         agent.setWorkspace(workspace);
@@ -46,6 +52,10 @@ public class AgentService {
     }
 
     public List<AgentResponse> findByWorkspace(UUID workspaceId) {
+        Workspace workspace = workspaceRepository.findById(workspaceId)
+                .orElseThrow(() -> new IllegalArgumentException("Workspace not found"));
+        tenantAccessValidator.validateWorkspace(workspace);
+
         return agentRepository.findByWorkspaceId(workspaceId)
                 .stream()
                 .map(this::toResponse)
@@ -55,14 +65,17 @@ public class AgentService {
     public AgentResponse findById(UUID agentId) {
         Agent agent = agentRepository.findById(agentId)
                 .orElseThrow(() -> new IllegalArgumentException("Agent not found"));
+        tenantAccessValidator.validateAgent(agent);
 
         return toResponse(agent);
     }
 
     @Transactional
     public AskAgentResponse ask(UUID agentId, AskAgentRequest request) {
+        Timer.Sample sample = Timer.start(meterRegistry);
         Agent agent = agentRepository.findById(agentId)
                 .orElseThrow(() -> new IllegalArgumentException("Agent not found"));
+        tenantAccessValidator.validateAgent(agent);
 
         Conversation conversation = resolveConversation(agent, request);
 
@@ -84,13 +97,23 @@ public class AgentService {
 
         messageRepository.save(newMessage(conversation, MessageRole.ASSISTANT, answer));
 
+        meterRegistry.counter("ai.agent.calls", "agentId", agentId.toString()).increment();
+        sample.stop(meterRegistry.timer("ai.agent.call.duration", "agentId", agentId.toString()));
+
         return new AskAgentResponse(conversation.getId(), answer);
     }
 
     private Conversation resolveConversation(Agent agent, AskAgentRequest request) {
         if (request.conversationId() != null) {
-            return conversationRepository.findById(request.conversationId())
+            Conversation conversation = conversationRepository.findByIdAndAgentWorkspaceTenantId(
+                            request.conversationId(),
+                            agent.getWorkspace().getTenant().getId()
+                    )
                     .orElseThrow(() -> new IllegalArgumentException("Conversation not found"));
+            if (!conversation.getAgent().getId().equals(agent.getId())) {
+                throw new IllegalArgumentException("Conversation does not belong to agent");
+            }
+            return conversation;
         }
 
         Conversation conversation = new Conversation();

@@ -1,6 +1,7 @@
 package com.wajahat.aiworkflow.workspace;
 
 import com.wajahat.aiworkflow.tenant.Tenant;
+import com.wajahat.aiworkflow.tenant.TenantAccessValidator;
 import com.wajahat.aiworkflow.tenant.TenantRepository;
 import java.util.List;
 import java.util.UUID;
@@ -13,8 +14,10 @@ public class WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
     private final TenantRepository tenantRepository;
+    private final TenantAccessValidator tenantAccessValidator;
 
     public WorkspaceResponse create(UUID tenantId, CreateWorkspaceRequest request) {
+        tenantAccessValidator.validateTenantId(tenantId);
         Tenant tenant = tenantRepository.findById(tenantId)
                 .orElseThrow(() -> new IllegalArgumentException("Tenant not found"));
 
@@ -27,6 +30,7 @@ public class WorkspaceService {
     }
 
     public List<WorkspaceResponse> findByTenant(UUID tenantId) {
+        tenantAccessValidator.validateTenantId(tenantId);
         return workspaceRepository.findByTenantId(tenantId)
                 .stream()
                 .map(this::toResponse)

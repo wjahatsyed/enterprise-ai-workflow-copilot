@@ -5,15 +5,13 @@ import static org.mockito.Mockito.verify;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationEventPublisher;
 
 class DomainEventPublisherTest {
 
     @Test
-    void publishShouldDelegateToSpringApplicationEventPublisher() {
-        ApplicationEventPublisher applicationEventPublisher =
-                org.mockito.Mockito.mock(ApplicationEventPublisher.class);
-        DomainEventPublisher publisher = new DomainEventPublisher(applicationEventPublisher);
+    void publishShouldSaveEventToOutbox() {
+        OutboxEventService outboxEventService = org.mockito.Mockito.mock(OutboxEventService.class);
+        DomainEventPublisher publisher = new DomainEventPublisher(outboxEventService);
         DomainEvent event = DomainEvent.of(
                 DomainEventType.WORKFLOW_STARTED,
                 UUID.randomUUID(),
@@ -23,6 +21,6 @@ class DomainEventPublisherTest {
 
         publisher.publish(event);
 
-        verify(applicationEventPublisher).publishEvent(event);
+        verify(outboxEventService).save(event);
     }
 }

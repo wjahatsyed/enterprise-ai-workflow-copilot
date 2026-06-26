@@ -24,9 +24,35 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics,prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  observations:
+    key-values:
+      application: ${spring.application.name}
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
 
 openai:
   api-key: ${OPENAI_API_KEY:}
   embedding-model: text-embedding-3-small
   chat-model: gpt-4.1-mini
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:portfolio-demo-secret-change-me-please}
+    expiration-seconds: 86400
+
+outbox:
+  processor:
+    fixed-delay-ms: 5000
+  retry:
+    max-attempts: 3
+    initial-backoff-ms: 1000
+    max-backoff-ms: 60000
