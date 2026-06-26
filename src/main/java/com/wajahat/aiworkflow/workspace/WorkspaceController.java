@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,7 @@ public class WorkspaceController {
     private final WorkspaceService workspaceService;
 
     @PostMapping
+    @PreAuthorize("hasRole('TENANT_ADMIN')")
     public WorkspaceResponse create(
             @PathVariable UUID tenantId,
             @Valid @RequestBody CreateWorkspaceRequest request
@@ -22,6 +24,7 @@ public class WorkspaceController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('TENANT_ADMIN', 'MEMBER')")
     public List<WorkspaceResponse> findByTenant(@PathVariable UUID tenantId) {
         return workspaceService.findByTenant(tenantId);
     }

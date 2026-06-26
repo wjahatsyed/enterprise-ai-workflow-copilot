@@ -7,11 +7,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @SpringBootTest
+@WithMockUser(roles = "TENANT_ADMIN")
 public class PathVariableValidationTest {
 
     private MockMvc mockMvc;
@@ -21,7 +24,9 @@ public class PathVariableValidationTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
+                .build();
     }
 
     @Test
