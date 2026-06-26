@@ -13,6 +13,8 @@ import com.wajahat.aiworkflow.action.ActionType;
 import com.wajahat.aiworkflow.agent.AgentService;
 import com.wajahat.aiworkflow.agent.AskAgentResponse;
 import com.wajahat.aiworkflow.event.DomainEventPublisher;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import com.wajahat.aiworkflow.tenant.Tenant;
 import com.wajahat.aiworkflow.tenant.TenantContext;
 import com.wajahat.aiworkflow.workspace.Workspace;
@@ -54,6 +56,8 @@ class WorkflowServiceTest {
     @Mock
     private DomainEventPublisher eventPublisher;
 
+    private MeterRegistry meterRegistry = new SimpleMeterRegistry();
+
     private WorkflowService workflowService;
 
     @BeforeEach
@@ -68,7 +72,8 @@ class WorkflowServiceTest {
                 new ObjectMapper(),
                 agentService,
                 actionDispatcher,
-                eventPublisher
+                eventPublisher,
+                meterRegistry
         );
     }
 

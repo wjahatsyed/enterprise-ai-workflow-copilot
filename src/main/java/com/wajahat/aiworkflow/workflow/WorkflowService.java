@@ -11,6 +11,8 @@ import com.wajahat.aiworkflow.action.ActionStepConfig;
 import com.wajahat.aiworkflow.event.DomainEvent;
 import com.wajahat.aiworkflow.event.DomainEventPublisher;
 import com.wajahat.aiworkflow.event.DomainEventType;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
@@ -33,6 +35,7 @@ public class WorkflowService {
     private final AgentService agentService;
     private final ActionDispatcher actionDispatcher;
     private final DomainEventPublisher eventPublisher;
+    private final MeterRegistry meterRegistry;
 
     @Transactional
     public WorkflowResponse create(UUID workspaceId, CreateWorkflowRequest request) {
@@ -92,6 +95,7 @@ public class WorkflowService {
 
     @Transactional
     public WorkflowRunResponse startRun(UUID workflowId, StartWorkflowRunRequest request) {
+        Timer.Sample sample = Timer.start(meterRegistry);
         Workflow workflow = workflowRepository.findByIdAndWorkspaceTenantId(workflowId, TenantContext.getTenantId())
                 .orElseThrow(() -> new IllegalArgumentException("Workflow not found"));
 
@@ -112,9 +116,12 @@ public class WorkflowService {
                 )
         ));
 
-        List<WorkflowStep> steps = stepRepository.findByWorkflowIdOrderByStepOrderAsc(workflowId);
+        meterRegistry.counter("workflow.runs.started", "workflowId", workflow.getId().toString()).increment();
 
-        return continueRun(savedRun, steps, request.inputJson());
+        List<WorkflowStep> steps = stepRepository.findByWorkflowIdOrderByStepOrderAsc(workflowId);
+        WorkflowRunResponse response = continueRun(savedRun, steps, request.inputJson());
+        sample.stop(meterRegistry.timer("workflow.run.duration", "workflowId", workflow.getId().toString()));
+        return response;
     }
 
     private WorkflowRunResponse continueRun(
