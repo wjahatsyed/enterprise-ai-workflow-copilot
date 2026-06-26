@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -55,5 +56,37 @@ class OutboxEventServiceTest {
         assertThat(domainEvent.type()).isEqualTo(DomainEventType.WORKFLOW_STEP_COMPLETED);
         assertThat(domainEvent.aggregateId()).isEqualTo(aggregateId);
         assertThat(domainEvent.payload()).containsEntry("status", "COMPLETED");
+    }
+
+    @Test
+    void markFailedShouldScheduleRetryWithExponentialBackoff() {
+        OutboxEventRepository repository = org.mockito.Mockito.mock(OutboxEventRepository.class);
+        OutboxEventService service = new OutboxEventService(repository, new ObjectMapper());
+        OutboxEvent outboxEvent = new OutboxEvent();
+        outboxEvent.setRetryCount(1);
+        LocalDateTime beforeFailure = LocalDateTime.now();
+
+        service.markFailed(outboxEvent, new IllegalStateException("temporary failure"));
+
+        assertThat(outboxEvent.getStatus()).isEqualTo(OutboxEventStatus.FAILED);
+        assertThat(outboxEvent.getRetryCount()).isEqualTo(2);
+        assertThat(outboxEvent.getErrorMessage()).isEqualTo("temporary failure");
+        assertThat(outboxEvent.getNextRetryAt()).isAfter(beforeFailure);
+        verify(repository).save(outboxEvent);
+    }
+
+    @Test
+    void markFailedShouldMoveEventToDeadLetterAfterMaxAttempts() {
+        OutboxEventRepository repository = org.mockito.Mockito.mock(OutboxEventRepository.class);
+        OutboxEventService service = new OutboxEventService(repository, new ObjectMapper());
+        OutboxEvent outboxEvent = new OutboxEvent();
+        outboxEvent.setRetryCount(2);
+
+        service.markFailed(outboxEvent, new IllegalStateException("permanent failure"));
+
+        assertThat(outboxEvent.getStatus()).isEqualTo(OutboxEventStatus.DEAD_LETTER);
+        assertThat(outboxEvent.getRetryCount()).isEqualTo(3);
+        assertThat(outboxEvent.getNextRetryAt()).isNull();
+        verify(repository).save(outboxEvent);
     }
 }

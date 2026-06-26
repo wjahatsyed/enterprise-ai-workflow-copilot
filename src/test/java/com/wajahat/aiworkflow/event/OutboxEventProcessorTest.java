@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -17,7 +18,7 @@ class OutboxEventProcessorTest {
         ApplicationEventPublisher applicationEventPublisher =
                 org.mockito.Mockito.mock(ApplicationEventPublisher.class);
         OutboxEventProcessor processor =
-                new OutboxEventProcessor(outboxEventService, applicationEventPublisher);
+                new OutboxEventProcessor(outboxEventService, applicationEventPublisher, new SimpleMeterRegistry());
         OutboxEvent outboxEvent = outboxEvent();
         DomainEvent domainEvent = DomainEvent.of(
                 DomainEventType.WORKFLOW_STARTED,
@@ -42,7 +43,7 @@ class OutboxEventProcessorTest {
         ApplicationEventPublisher applicationEventPublisher =
                 org.mockito.Mockito.mock(ApplicationEventPublisher.class);
         OutboxEventProcessor processor =
-                new OutboxEventProcessor(outboxEventService, applicationEventPublisher);
+                new OutboxEventProcessor(outboxEventService, applicationEventPublisher, new SimpleMeterRegistry());
         OutboxEvent outboxEvent = outboxEvent();
         IllegalStateException exception = new IllegalStateException("bad payload");
 

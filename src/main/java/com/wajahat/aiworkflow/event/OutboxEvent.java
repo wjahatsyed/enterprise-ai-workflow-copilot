@@ -47,5 +47,7 @@ public class OutboxEvent {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    private LocalDateTime nextRetryAt;
+
     private LocalDateTime processedAt;
 }
