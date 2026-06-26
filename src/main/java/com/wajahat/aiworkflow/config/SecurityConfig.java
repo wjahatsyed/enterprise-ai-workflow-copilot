@@ -1,6 +1,7 @@
 package com.wajahat.aiworkflow.config;
 
 import com.wajahat.aiworkflow.auth.JwtAuthenticationFilter;
+import com.wajahat.aiworkflow.auth.ApiKeyAuthenticationFilter;
 import com.wajahat.aiworkflow.tenant.TenantFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ApiKeyAuthenticationFilter apiKeyAuthenticationFilter;
     private final TenantFilter tenantFilter;
 
     @Bean
@@ -32,7 +34,8 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(tenantFilter, JwtAuthenticationFilter.class)
+                .addFilterAfter(apiKeyAuthenticationFilter, JwtAuthenticationFilter.class)
+                .addFilterAfter(tenantFilter, ApiKeyAuthenticationFilter.class)
                 .build();
     }
 }
