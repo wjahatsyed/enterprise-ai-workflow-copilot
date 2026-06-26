@@ -48,3 +48,11 @@ security:
   jwt:
     secret: ${JWT_SECRET:portfolio-demo-secret-change-me-please}
     expiration-seconds: 86400
+
+outbox:
+  processor:
+    fixed-delay-ms: 5000
+  retry:
+    max-attempts: 3
+    initial-backoff-ms: 1000
+    max-backoff-ms: 60000
