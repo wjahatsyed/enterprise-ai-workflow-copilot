@@ -1,0 +1,11 @@
+package com.wajahat.aiworkflow.event;
+
+public enum DomainEventType {
+    WORKFLOW_STARTED,
+    WORKFLOW_STEP_COMPLETED,
+    APPROVAL_REQUESTED,
+    APPROVAL_APPROVED,
+    APPROVAL_REJECTED,
+    EXTERNAL_ACTION_REQUESTED,
+    EXTERNAL_ACTION_COMPLETED
+}

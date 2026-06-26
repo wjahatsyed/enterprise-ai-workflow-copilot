@@ -2,6 +2,16 @@ package com.wajahat.aiworkflow.workflow;
 
 import com.wajahat.aiworkflow.workspace.Workspace;
 import com.wajahat.aiworkflow.workspace.WorkspaceRepository;
+import com.wajahat.aiworkflow.agent.AgentService;
+import com.wajahat.aiworkflow.agent.AskAgentResponse;
+import com.wajahat.aiworkflow.action.ActionDispatcher;
+import com.wajahat.aiworkflow.action.ActionExecutionResult;
+import com.wajahat.aiworkflow.action.ActionStepConfig;
+import com.wajahat.aiworkflow.event.DomainEvent;
+import com.wajahat.aiworkflow.event.DomainEventPublisher;
+import com.wajahat.aiworkflow.event.DomainEventType;
+import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +28,10 @@ public class WorkflowService {
     private final WorkflowStepRepository stepRepository;
     private final WorkflowRunRepository runRepository;
     private final WorkflowStepRunRepository stepRunRepository;
+    private final ObjectMapper objectMapper;
+    private final AgentService agentService;
+    private final ActionDispatcher actionDispatcher;
+    private final DomainEventPublisher eventPublisher;
 
     @Transactional
     public WorkflowResponse create(UUID workspaceId, CreateWorkflowRequest request) {
@@ -87,6 +101,16 @@ public class WorkflowService {
 
         WorkflowRun savedRun = runRepository.save(run);
 
+        eventPublisher.publish(DomainEvent.of(
+                DomainEventType.WORKFLOW_STARTED,
+                savedRun.getId(),
+                "WorkflowRun",
+                Map.of(
+                        "workflowId", workflow.getId().toString(),
+                        "workflowName", workflow.getName()
+                )
+        ));
+
         List<WorkflowStep> steps = stepRepository.findByWorkflowIdOrderByStepOrderAsc(workflowId);
 
         String currentInput = request.inputJson();
@@ -108,10 +132,35 @@ public class WorkflowService {
 
                 stepRunRepository.save(stepRun);
 
+                eventPublisher.publish(DomainEvent.of(
+                        DomainEventType.WORKFLOW_STEP_COMPLETED,
+                        savedRun.getId(),
+                        "WorkflowRun",
+                        Map.of(
+                                "stepId", step.getId().toString(),
+                                "stepName", step.getName(),
+                                "stepType", step.getType().name(),
+                                "status", stepRun.getStatus().name()
+                        )
+                ));
+
                 if (step.getType() == WorkflowStepType.HUMAN_APPROVAL) {
+                    savedRun.setApprovalStatus(ApprovalStatus.PENDING);
                     savedRun.setStatus(WorkflowRunStatus.WAITING_FOR_APPROVAL);
                     savedRun.setOutputJson(output);
                     runRepository.save(savedRun);
+
+                    eventPublisher.publish(DomainEvent.of(
+                            DomainEventType.APPROVAL_REQUESTED,
+                            savedRun.getId(),
+                            "WorkflowRun",
+                            Map.of(
+                                    "workflowId", workflow.getId().toString(),
+                                    "stepId", step.getId().toString(),
+                                    "stepName", step.getName()
+                            )
+                    ));
+
                     return findRunById(savedRun.getId());
                 }
 
@@ -122,6 +171,18 @@ public class WorkflowService {
                 stepRun.setErrorMessage(e.getMessage());
                 stepRun.setCompletedAt(LocalDateTime.now());
                 stepRunRepository.save(stepRun);
+
+                eventPublisher.publish(DomainEvent.of(
+                        DomainEventType.WORKFLOW_STEP_COMPLETED,
+                        savedRun.getId(),
+                        "WorkflowRun",
+                        Map.of(
+                                "stepId", step.getId().toString(),
+                                "stepName", step.getName(),
+                                "stepType", step.getType().name(),
+                                "status", stepRun.getStatus().name()
+                        )
+                ));
 
                 savedRun.setStatus(WorkflowRunStatus.FAILED);
                 savedRun.setOutputJson(finalOutput);
@@ -161,17 +222,69 @@ public class WorkflowService {
     private String executeStep(WorkflowStep step, String inputJson) {
         return switch (step.getType()) {
             case MANUAL_TASK -> """
-                    {"status":"manual_task_recorded","input":%s}
-                    """.formatted(inputJson);
+                {"status":"manual_task_recorded","input":%s}
+                """.formatted(inputJson);
 
             case HUMAN_APPROVAL -> """
-                    {"status":"waiting_for_human_approval","input":%s}
-                    """.formatted(inputJson);
+                {"status":"waiting_for_human_approval","input":%s}
+                """.formatted(inputJson);
 
-            case AI_AGENT -> """
-                    {"status":"ai_agent_step_placeholder","stepName":"%s","input":%s}
-                    """.formatted(step.getName(), inputJson);
+            case AI_AGENT -> executeAiAgentStep(step, inputJson);
+
+            case EXTERNAL_ACTION -> executeExternalActionStep(step, inputJson);
         };
+    }
+
+    private String executeAiAgentStep(WorkflowStep step, String inputJson) {
+        try {
+            AiAgentStepConfig config =
+                    objectMapper.readValue(step.getConfigJson(), AiAgentStepConfig.class);
+
+            if (config.agentId() == null) {
+                throw new IllegalArgumentException("AI_AGENT step requires agentId in configJson");
+            }
+
+            String question = buildAgentQuestion(config.promptTemplate(), inputJson);
+
+            AskAgentResponse response = agentService.askFromWorkflow(
+                    config.agentId(),
+                    question
+            );
+
+            return """
+                {"status":"ai_agent_completed","conversationId":"%s","answer":%s}
+                """.formatted(
+                    response.conversationId(),
+                    objectMapper.writeValueAsString(response.answer())
+            );
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to execute AI agent step: " + e.getMessage(), e);
+        }
+    }
+
+    private String executeExternalActionStep(WorkflowStep step, String inputJson) {
+        try {
+            ActionStepConfig config =
+                    objectMapper.readValue(step.getConfigJson(), ActionStepConfig.class);
+
+            if (config.actionType() == null) {
+                throw new IllegalArgumentException("EXTERNAL_ACTION step requires actionType in configJson");
+            }
+
+            ActionExecutionResult result = actionDispatcher.execute(config, inputJson);
+
+            return objectMapper.writeValueAsString(result);
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to execute external action step: " + e.getMessage(), e);
+        }
+    }
+
+    private String buildAgentQuestion(String promptTemplate, String inputJson) {
+        if (promptTemplate == null || promptTemplate.isBlank()) {
+            return "Analyze the following workflow input and provide the next best action:\n" + inputJson;
+        }
+
+        return promptTemplate.replace("{{input}}", inputJson);
     }
 
     private WorkflowRunStatus resolveCompletedStatus(WorkflowStep step) {
@@ -205,4 +318,89 @@ public class WorkflowService {
                 stepRun.getCompletedAt()
         );
     }
+
+    @Transactional
+    public ApprovalResponse approveRun(
+            UUID runId,
+            ApproveWorkflowRequest request) {
+
+        WorkflowRun run = runRepository.findById(runId)
+                .orElseThrow(() -> new IllegalArgumentException("Run not found"));
+
+        if (run.getStatus() != WorkflowRunStatus.WAITING_FOR_APPROVAL) {
+            throw new IllegalStateException("Run is not waiting for approval");
+        }
+
+        run.setApprovalStatus(ApprovalStatus.APPROVED);
+        run.setApprovedBy(request.approvedBy());
+        run.setApprovedAt(LocalDateTime.now());
+
+        run.setStatus(WorkflowRunStatus.COMPLETED);
+
+        runRepository.save(run);
+
+        eventPublisher.publish(DomainEvent.of(
+                DomainEventType.APPROVAL_APPROVED,
+                run.getId(),
+                "WorkflowRun",
+                Map.of(
+                        "approvedBy", request.approvedBy()
+                )
+        ));
+
+        return toApprovalResponse(run);
+    }
+
+    @Transactional
+    public ApprovalResponse rejectRun(
+            UUID runId,
+            RejectWorkflowRequest request) {
+
+        WorkflowRun run = runRepository.findById(runId)
+                .orElseThrow(() -> new IllegalArgumentException("Run not found"));
+
+        if (run.getStatus() != WorkflowRunStatus.WAITING_FOR_APPROVAL) {
+            throw new IllegalStateException("Run is not waiting for approval");
+        }
+
+        run.setApprovalStatus(ApprovalStatus.REJECTED);
+        run.setApprovedBy(request.rejectedBy());
+        run.setApprovedAt(LocalDateTime.now());
+        run.setRejectionReason(request.reason());
+
+        run.setStatus(WorkflowRunStatus.FAILED);
+
+        runRepository.save(run);
+
+        eventPublisher.publish(DomainEvent.of(
+                DomainEventType.APPROVAL_REJECTED,
+                run.getId(),
+                "WorkflowRun",
+                Map.of(
+                        "rejectedBy", request.rejectedBy(),
+                        "reason", request.reason()
+                )
+        ));
+
+        return toApprovalResponse(run);
+    }
+
+    public ApprovalResponse getApproval(UUID runId) {
+
+        WorkflowRun run = runRepository.findById(runId)
+                .orElseThrow(() -> new IllegalArgumentException("Run not found"));
+
+        return toApprovalResponse(run);
+    }
+
+    private ApprovalResponse toApprovalResponse(WorkflowRun run) {
+        return new ApprovalResponse(
+                run.getId(),
+                run.getApprovalStatus(),
+                run.getApprovedBy(),
+                run.getApprovedAt(),
+                run.getRejectionReason()
+        );
+    }
 }
+
