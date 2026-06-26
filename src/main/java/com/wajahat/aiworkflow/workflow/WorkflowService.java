@@ -4,6 +4,9 @@ import com.wajahat.aiworkflow.workspace.Workspace;
 import com.wajahat.aiworkflow.workspace.WorkspaceRepository;
 import com.wajahat.aiworkflow.agent.AgentService;
 import com.wajahat.aiworkflow.agent.AskAgentResponse;
+import com.wajahat.aiworkflow.action.ActionDispatcher;
+import com.wajahat.aiworkflow.action.ActionExecutionResult;
+import com.wajahat.aiworkflow.action.ActionStepConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +26,7 @@ public class WorkflowService {
     private final WorkflowStepRunRepository stepRunRepository;
     private final ObjectMapper objectMapper;
     private final AgentService agentService;
+    private final ActionDispatcher actionDispatcher;
 
     @Transactional
     public WorkflowResponse create(UUID workspaceId, CreateWorkflowRequest request) {
@@ -174,6 +178,8 @@ public class WorkflowService {
                 """.formatted(inputJson);
 
             case AI_AGENT -> executeAiAgentStep(step, inputJson);
+
+            case EXTERNAL_ACTION -> executeExternalActionStep(step, inputJson);
         };
     }
 
@@ -201,6 +207,23 @@ public class WorkflowService {
             );
         } catch (Exception e) {
             throw new IllegalStateException("Failed to execute AI agent step: " + e.getMessage(), e);
+        }
+    }
+
+    private String executeExternalActionStep(WorkflowStep step, String inputJson) {
+        try {
+            ActionStepConfig config =
+                    objectMapper.readValue(step.getConfigJson(), ActionStepConfig.class);
+
+            if (config.actionType() == null) {
+                throw new IllegalArgumentException("EXTERNAL_ACTION step requires actionType in configJson");
+            }
+
+            ActionExecutionResult result = actionDispatcher.execute(config, inputJson);
+
+            return objectMapper.writeValueAsString(result);
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to execute external action step: " + e.getMessage(), e);
         }
     }
 
