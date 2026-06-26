@@ -6,6 +6,8 @@ import com.wajahat.aiworkflow.document.SearchResultResponse;
 import com.wajahat.aiworkflow.document.SemanticSearchService;
 import com.wajahat.aiworkflow.workspace.Workspace;
 import com.wajahat.aiworkflow.workspace.WorkspaceRepository;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class AgentService {
     private final MessageRepository messageRepository;
     private final SemanticSearchService semanticSearchService;
     private final OpenAiChatClient openAiChatClient;
+    private final MeterRegistry meterRegistry;
 
     @Value("${openai.chat-model}")
     private String defaultChatModel;
@@ -61,6 +64,7 @@ public class AgentService {
 
     @Transactional
     public AskAgentResponse ask(UUID agentId, AskAgentRequest request) {
+        Timer.Sample sample = Timer.start(meterRegistry);
         Agent agent = agentRepository.findById(agentId)
                 .orElseThrow(() -> new IllegalArgumentException("Agent not found"));
 
@@ -83,6 +87,9 @@ public class AgentService {
         );
 
         messageRepository.save(newMessage(conversation, MessageRole.ASSISTANT, answer));
+
+        meterRegistry.counter("ai.agent.calls", "agentId", agentId.toString()).increment();
+        sample.stop(meterRegistry.timer("ai.agent.call.duration", "agentId", agentId.toString()));
 
         return new AskAgentResponse(conversation.getId(), answer);
     }

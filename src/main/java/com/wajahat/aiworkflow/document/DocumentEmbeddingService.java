@@ -1,6 +1,8 @@
 package com.wajahat.aiworkflow.document;
 
 import com.wajahat.aiworkflow.ai.OpenAiEmbeddingClient;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -17,12 +19,14 @@ public class DocumentEmbeddingService {
     private final DocumentRepository documentRepository;
     private final DocumentChunkRepository chunkRepository;
     private final OpenAiEmbeddingClient embeddingClient;
+    private final MeterRegistry meterRegistry;
 
     @Value("${openai.embedding-model}")
     private String embeddingModel;
 
     @Transactional
     public int embedDocument(UUID documentId) {
+        Timer.Sample sample = Timer.start(meterRegistry);
         if (!documentRepository.existsById(documentId)) {
             throw new IllegalArgumentException("Document not found");
         }
@@ -40,6 +44,9 @@ public class DocumentEmbeddingService {
             chunkRepository.save(chunk);
             embedded++;
         }
+
+        meterRegistry.counter("document.ingestion.chunks", "documentId", documentId.toString()).increment(embedded);
+        sample.stop(meterRegistry.timer("document.ingestion.duration", "documentId", documentId.toString()));
 
         return embedded;
     }
