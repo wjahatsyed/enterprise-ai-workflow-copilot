@@ -1,16 +1,23 @@
 ## Summary
 
-- Add comprehensive test dependencies for Spring Boot starters including actuator, data-jpa, flyway, security, validation, webflux, and webmvc testing.
-- Implement input validation with `@Valid` and `@NotNull` annotations across all request DTOs and entity models.
-- Add exception handling and custom error responses for validation failures and business logic violations.
-- Enhance database migration robustness with improved Flyway configuration and test utilities.
-- Implement health checks and readiness probes using Spring Boot Actuator endpoints.
-- Add retry logic and circuit breaker patterns for external API calls (OpenAI) to improve resilience.
-- Implement request/response logging filters for debugging and audit trails.
-- Add comprehensive null-safety checks and defensive programming practices throughout services.
-- Implement proper transaction management with `@Transactional` annotations for consistency.
-- Add test coverage for error scenarios, edge cases, and failure handling.
-- Update configuration for graceful shutdown and resource cleanup.
+- Add comprehensive README.md with project overview, features, and architecture documentation.
+- Document multi-tenancy implementation with tenant isolation at the data level enforced via `TenantContext`.
+- Explain document knowledge base and semantic search capabilities using OpenAI embeddings.
+- Describe AI agent configuration and workflow orchestration with human-in-the-loop approvals.
+- Detail Action Framework and Outbox Pattern for reliable domain event publishing.
+- Provide setup instructions for Docker Compose (PostgreSQL and Redis) and application startup.
+- Document JWT-based authentication flow with demo mode using email-based login.
+- Include complete demo API flow with 10 practical examples covering:
+  - Tenant and user creation
+  - Login and authentication
+  - Workspace and document management
+  - Embedding generation for semantic search
+  - AI agent creation and interaction
+  - Workflow definition and execution
+  - Human approval workflows
+- Add Technology Stack section (Java 25, Spring Boot 4.1.0, PostgreSQL 17, Redis 7, OpenAI API).
+- Include curl examples for easy API testing and exploration.
+- Provide Swagger UI documentation link.
 
 ## Validation
 
@@ -19,4 +26,4 @@
 
 ## Notes
 
-This PR hardens the backend by improving reliability, adding defensive programming practices, comprehensive error handling, and extensive test coverage to ensure system stability in production environments.
+This PR provides comprehensive documentation and demo workflow examples to help new developers and users quickly understand and explore the Enterprise AI Workflow Copilot platform's capabilities.
