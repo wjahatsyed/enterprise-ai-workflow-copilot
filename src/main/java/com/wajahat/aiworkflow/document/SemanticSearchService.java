@@ -3,6 +3,9 @@ package com.wajahat.aiworkflow.document;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wajahat.aiworkflow.ai.OpenAiEmbeddingClient;
+import com.wajahat.aiworkflow.tenant.TenantAccessValidator;
+import com.wajahat.aiworkflow.workspace.Workspace;
+import com.wajahat.aiworkflow.workspace.WorkspaceRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -14,10 +17,16 @@ import org.springframework.stereotype.Service;
 public class SemanticSearchService {
 
     private final DocumentChunkRepository chunkRepository;
+    private final WorkspaceRepository workspaceRepository;
     private final OpenAiEmbeddingClient embeddingClient;
     private final ObjectMapper objectMapper;
+    private final TenantAccessValidator tenantAccessValidator;
 
     public List<SearchResultResponse> search(UUID workspaceId, SearchRequest request) {
+        Workspace workspace = workspaceRepository.findById(workspaceId)
+                .orElseThrow(() -> new IllegalArgumentException("Workspace not found"));
+        tenantAccessValidator.validateWorkspace(workspace);
+
         int topK = request.topK() == null ? 5 : request.topK();
 
         List<Double> queryEmbedding = embeddingClient.embed(request.query());

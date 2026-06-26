@@ -1,5 +1,6 @@
 package com.wajahat.aiworkflow.workspace;
 
+import com.wajahat.aiworkflow.tenant.TenantAccessValidator;
 import com.wajahat.aiworkflow.user.AppUser;
 import com.wajahat.aiworkflow.user.AppUserRepository;
 import java.util.List;
@@ -14,13 +15,16 @@ public class WorkspaceMemberService {
     private final WorkspaceRepository workspaceRepository;
     private final WorkspaceMemberRepository memberRepository;
     private final AppUserRepository appUserRepository;
+    private final TenantAccessValidator tenantAccessValidator;
 
     public WorkspaceMemberResponse addMember(UUID workspaceId, AddWorkspaceMemberRequest request) {
         Workspace workspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow(() -> new IllegalArgumentException("Workspace not found"));
+        tenantAccessValidator.validateWorkspace(workspace);
 
         AppUser user = appUserRepository.findById(request.userId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        tenantAccessValidator.validateUser(user);
 
         if (!user.getTenant().getId().equals(workspace.getTenant().getId())) {
             throw new IllegalArgumentException("User does not belong to workspace tenant");
@@ -39,6 +43,10 @@ public class WorkspaceMemberService {
     }
 
     public List<WorkspaceMemberResponse> findByWorkspace(UUID workspaceId) {
+        Workspace workspace = workspaceRepository.findById(workspaceId)
+                .orElseThrow(() -> new IllegalArgumentException("Workspace not found"));
+        tenantAccessValidator.validateWorkspace(workspace);
+
         return memberRepository.findByWorkspaceId(workspaceId)
                 .stream()
                 .map(this::toResponse)

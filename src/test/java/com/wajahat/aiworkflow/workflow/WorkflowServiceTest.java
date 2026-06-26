@@ -16,6 +16,7 @@ import com.wajahat.aiworkflow.event.DomainEventPublisher;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import com.wajahat.aiworkflow.tenant.Tenant;
+import com.wajahat.aiworkflow.tenant.TenantAccessValidator;
 import com.wajahat.aiworkflow.tenant.TenantContext;
 import com.wajahat.aiworkflow.workspace.Workspace;
 import com.wajahat.aiworkflow.workspace.WorkspaceRepository;
@@ -73,7 +74,8 @@ class WorkflowServiceTest {
                 agentService,
                 actionDispatcher,
                 eventPublisher,
-                meterRegistry
+                meterRegistry,
+                new TenantAccessValidator()
         );
     }
 
@@ -99,7 +101,7 @@ class WorkflowServiceTest {
                 "{\"status\":\"waiting_for_human_approval\"}"
         );
 
-        when(runRepository.findByIdAndWorkflowWorkspaceTenantId(runId, tenantId)).thenReturn(Optional.of(run));
+        when(runRepository.findById(runId)).thenReturn(Optional.of(run));
         when(stepRunRepository.findByWorkflowRunIdOrderByCreatedAtAsc(runId))
                 .thenReturn(List.of(aiStepRun, approvalStepRun));
         when(stepRepository.findByWorkflowIdOrderByStepOrderAsc(workflow.getId()))
@@ -134,7 +136,7 @@ class WorkflowServiceTest {
                 "{\"status\":\"waiting_for_human_approval\"}"
         );
 
-        when(runRepository.findByIdAndWorkflowWorkspaceTenantId(runId, tenantId)).thenReturn(Optional.of(run));
+        when(runRepository.findById(runId)).thenReturn(Optional.of(run));
         when(stepRunRepository.findByWorkflowRunIdOrderByCreatedAtAsc(runId))
                 .thenReturn(List.of(approvalStepRun));
         when(stepRepository.findByWorkflowIdOrderByStepOrderAsc(workflow.getId()))
@@ -157,7 +159,7 @@ class WorkflowServiceTest {
         UUID runId = UUID.randomUUID();
         WorkflowRun run = waitingForApprovalRun(runId, workflow(tenantId));
 
-        when(runRepository.findByIdAndWorkflowWorkspaceTenantId(runId, tenantId)).thenReturn(Optional.of(run));
+        when(runRepository.findById(runId)).thenReturn(Optional.of(run));
 
         ApprovalResponse response = workflowService.rejectRun(
                 runId,

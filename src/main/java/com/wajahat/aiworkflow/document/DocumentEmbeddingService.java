@@ -1,6 +1,7 @@
 package com.wajahat.aiworkflow.document;
 
 import com.wajahat.aiworkflow.ai.OpenAiEmbeddingClient;
+import com.wajahat.aiworkflow.tenant.TenantAccessValidator;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class DocumentEmbeddingService {
     private final DocumentChunkRepository chunkRepository;
     private final OpenAiEmbeddingClient embeddingClient;
     private final MeterRegistry meterRegistry;
+    private final TenantAccessValidator tenantAccessValidator;
 
     @Value("${openai.embedding-model}")
     private String embeddingModel;
@@ -27,9 +29,9 @@ public class DocumentEmbeddingService {
     @Transactional
     public int embedDocument(UUID documentId) {
         Timer.Sample sample = Timer.start(meterRegistry);
-        if (!documentRepository.existsById(documentId)) {
-            throw new IllegalArgumentException("Document not found");
-        }
+        Document document = documentRepository.findById(documentId)
+                .orElseThrow(() -> new IllegalArgumentException("Document not found"));
+        tenantAccessValidator.validateDocument(document);
 
         List<DocumentChunk> chunks =
                 chunkRepository.findByDocumentIdOrderByChunkIndexAsc(documentId);
