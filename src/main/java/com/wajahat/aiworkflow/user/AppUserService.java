@@ -1,6 +1,8 @@
 package com.wajahat.aiworkflow.user;
 
+import com.wajahat.aiworkflow.exception.TenantMismatchException;
 import com.wajahat.aiworkflow.tenant.Tenant;
+import com.wajahat.aiworkflow.tenant.TenantContext;
 import com.wajahat.aiworkflow.tenant.TenantRepository;
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +17,7 @@ public class AppUserService {
     private final TenantRepository tenantRepository;
 
     public UserResponse create(UUID tenantId, CreateUserRequest request) {
+        validateTenant(tenantId);
         Tenant tenant = tenantRepository.findById(tenantId)
                 .orElseThrow(() -> new IllegalArgumentException("Tenant not found"));
 
@@ -32,10 +35,18 @@ public class AppUserService {
     }
 
     public List<UserResponse> findByTenant(UUID tenantId) {
+        validateTenant(tenantId);
         return appUserRepository.findByTenantId(tenantId)
                 .stream()
                 .map(this::toResponse)
                 .toList();
+    }
+
+    private void validateTenant(UUID tenantId) {
+        UUID currentTenantId = TenantContext.getTenantId();
+        if (currentTenantId != null && !currentTenantId.equals(tenantId)) {
+            throw new TenantMismatchException("Access denied: tenant mismatch");
+        }
     }
 
     private UserResponse toResponse(AppUser user) {
