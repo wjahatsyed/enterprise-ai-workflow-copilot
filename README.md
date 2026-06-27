@@ -68,6 +68,17 @@ $env:OPENAI_API_KEY="your-key-here"
 The API will be available at `http://localhost:8080`.
 Swagger UI: `http://localhost:8080/swagger-ui.html`
 
+### Running the React Frontend
+The demo dashboard is available under `frontend/` and expects the backend at `http://localhost:8080`.
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+The Vite app will be available at `http://localhost:5173`. To point it at another backend, update `frontend/.env` and set `VITE_API_BASE_URL`.
+
 ## 🔐 Authentication Flow
 
 The application uses JWT-based authentication. In demo mode, you can log in using an existing user's email.
