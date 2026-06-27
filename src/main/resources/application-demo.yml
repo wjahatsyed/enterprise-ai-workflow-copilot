@@ -1,0 +1,25 @@
+# Demo Profile Configuration
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:demo-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+# OpenAI Stub / Configuration for Demo
+# Set to valid keys if you want real AI, but by default it shouldn't call OpenAI automatically on startup.
+openai:
+  api-key: demo-key
+  chat-model: gpt-4o-mini
+  embedding-model: text-embedding-3-small
+
+logging:
+  level:
+    com.wajahat.aiworkflow.demo: DEBUG
