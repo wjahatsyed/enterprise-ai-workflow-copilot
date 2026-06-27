@@ -1,5 +1,7 @@
 # Enterprise AI Workflow Copilot
 
+[![CI](https://github.com/wjahatsyed/enterprise-ai-workflow-copilot/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/wjahatsyed/enterprise-ai-workflow-copilot/actions/workflows/ci.yml)
+
 Enterprise AI Workflow Copilot is a multi-tenant platform designed to streamline complex business processes using AI agents and automated workflows. It provides a robust framework for managing documents, building a knowledge base with OpenAI embeddings, and orchestrating AI-driven actions with human-in-the-loop approvals.
 
 ## 🚀 Key Features
