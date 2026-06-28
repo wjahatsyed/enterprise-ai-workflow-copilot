@@ -65,6 +65,22 @@ $env:OPENAI_API_KEY="your-key-here"
 ./mvnw.cmd spring-boot:run
 ```
 
+### Running with Demo Seed Data
+To run the project with pre-seeded data for demo purposes (Acme Logistics tenant, demo user, workspace, documents, agents, and workflows), use the `demo` profile:
+
+```powershell
+./mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=demo
+```
+
+When running with the `demo` profile:
+- A tenant `Acme Logistics` (slug: `acme-logistics`) is created.
+- A tenant admin user `demo@acme.com` is created.
+- A workspace `Customer Operations` is created.
+- Sample documents (`Refund Policy`, `Escalation SOP`) are added.
+- A `Customer Support Agent` and a `Complaint Review Workflow` are configured.
+- The system uses an in-memory H2 database.
+- **Note**: OpenAI is NOT called automatically on startup. Embeddings are NOT generated automatically.
+
 The API will be available at `http://localhost:8080`.
 Swagger UI: `http://localhost:8080/swagger-ui.html`
 
@@ -87,9 +103,9 @@ The application uses JWT-based authentication. In demo mode, you can log in usin
 2. **Token**: Receive a JWT token.
 3. **Authorized Requests**: Include the token in the `Authorization: Bearer <token>` header for subsequent requests.
 
-## 📝 Demo API Flow
+## 📝 Demo API Flow (Manual)
 
-Follow these steps to explore the system's capabilities. Replace placeholders like `<token>`, `<tenantId>`, etc., with actual values from previous responses.
+If you are not using the `demo` profile, follow these steps to explore the system's capabilities. Replace placeholders like `<token>`, `<tenantId>`, etc., with actual values from previous responses.
 
 ### 1. Create Tenant
 Initial setup usually requires a `TENANT_ADMIN` role.
@@ -230,5 +246,58 @@ curl -X POST http://localhost:8080/api/workflow-runs/<runId>/approve \
   -H "Content-Type: application/json" \
   -d '{
     "note": "Everything looks good."
+  }'
+```
+
+## 🚀 Demo Profile Quick Start (Curl Examples)
+
+When running with `-Dspring-boot.run.profiles=demo`, use these examples to interact with the pre-seeded data.
+
+### 1. Login as Demo Admin
+```bash
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "demo@acme.com"
+  }'
+```
+*Take note of the `token` and `tenantId` in the response.*
+
+### 2. List Workspaces
+```bash
+curl -X GET http://localhost:8080/api/tenants/<tenantId>/workspaces \
+  -H "Authorization: Bearer <token>"
+```
+
+### 3. Ask Agent
+```bash
+# Get agentId from GET /api/workspaces/<workspaceId>/agents
+curl -X POST http://localhost:8080/api/agents/<agentId>/ask \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "question": "What is the refund policy for logistics delays?"
+  }'
+```
+
+### 4. Start Workflow
+```bash
+# Get workflowId from GET /api/workspaces/<workspaceId>/workflows
+curl -X POST http://localhost:8080/api/workflows/<workflowId>/runs \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": "My package is 3 days late and I want a refund."
+  }'
+```
+
+### 5. Approve Workflow
+```bash
+# Get runId from the start workflow response
+curl -X POST http://localhost:8080/api/workflow-runs/<runId>/approve \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "note": "Valid complaint, proceeding with refund."
   }'
 ```

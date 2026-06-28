@@ -1,0 +1,563 @@
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------------< com.wajahat:aiworkflow >-----------------------
+[INFO] Building  0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- clean:3.5.0:clean (default-clean) @ aiworkflow ---
+[INFO] Deleting D:\pw\enterprise-ai-workflow-copilot\backend\aiworkflow\target
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ aiworkflow ---
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] Copying 11 resources from src\main\resources to target\classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ aiworkflow ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 144 source files with javac [debug parameters release 25] to target\classes
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by lombok.permit.Permit
+WARNING: Please consider reporting this to the maintainers of class lombok.permit.Permit
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ aiworkflow ---
+[INFO] skip non existing resourceDirectory D:\pw\enterprise-ai-workflow-copilot\backend\aiworkflow\src\test\resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ aiworkflow ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 15 source files with javac [debug parameters release 25] to target\test-classes
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ aiworkflow ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.wajahat.aiworkflow.AiworkflowApplicationTests
+17:06:15.545 [main] INFO org.springframework.test.context.support.AnnotationConf
+igContextLoaderUtils -- Could not detect default configuration classes for test
+class [com.wajahat.aiworkflow.AiworkflowApplicationTests]: AiworkflowApplication
+Tests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:06:15.710 [main] INFO org.springframework.boot.test.context.SpringBootTestCon
+textBootstrapper -- Found @SpringBootConfiguration com.wajahat.aiworkflow.AiworkflowApplication for test class com.wajahat.aiworkflow.AiworkflowApplicationTests
+17:06:15.834 [main] INFO org.springframework.test.context.support.AnnotationConf
+igContextLoaderUtils -- Could not detect default configuration classes for test
+class [com.wajahat.aiworkflow.AiworkflowApplicationTests]: AiworkflowApplication
+Tests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:06:15.835 [main] INFO org.springframework.boot.test.context.SpringBootTestCon
+textBootstrapper -- Found @SpringBootConfiguration com.wajahat.aiworkflow.AiworkflowApplication for test class com.wajahat.aiworkflow.AiworkflowApplicationTests
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v4.1.0)
+{"@timestamp":"2026-06-27T12:06:16.5522998Z","@version":"1","level":"INFO","logg
+er_name":"com.wajahat.aiworkflow.AiworkflowApplicationTests","thread_name":"main
+","message":"Starting AiworkflowApplicationTests using Java 25.0.3 with PID 2124
+4 (started by Lenovo in D:\\pw\\enterprise-ai-workflow-copilot\\backend\\aiworkflow)"}
+{"@timestamp":"2026-06-27T12:06:16.565901Z","@version":"1","level":"INFO","logge
+r_name":"com.wajahat.aiworkflow.AiworkflowApplicationTests","thread_name":"main"
+,"message":"No active profile set, falling back to 1 default profile: \"default\""}
+{"@timestamp":"2026-06-27T12:06:18.2857822Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.data.repository.config.RepositoryConfigurationDele
+gate","thread_name":"main","message":"Bootstrapping Spring Data JPA repositories in DEFAULT mode."}
+{"@timestamp":"2026-06-27T12:06:18.6052025Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.data.repository.config.RepositoryConfigurationDele
+gate","thread_name":"main","message":"Finished Spring Data repository scanning in 301 ms. Found 15 JPA repository interfaces."}
+{"@timestamp":"2026-06-27T12:06:20.0961783Z","@version":"1","level":"INFO","logg
+er_name":"com.zaxxer.hikari.HikariDataSource","thread_name":"main","message":"HikariPool-1 - Starting..."}
+{"@timestamp":"2026-06-27T12:06:20.634427Z","@version":"1","level":"INFO","logge
+r_name":"com.zaxxer.hikari.pool.HikariPool","thread_name":"main","message":"HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@cda144a"}
+{"@timestamp":"2026-06-27T12:06:20.6376063Z","@version":"1","level":"INFO","logg
+er_name":"com.zaxxer.hikari.HikariDataSource","thread_name":"main","message":"HikariPool-1 - Start completed."}
+{"@timestamp":"2026-06-27T12:06:20.6816533Z","@version":"1","level":"INFO","logg
+er_name":"org.flywaydb.core.FlywayExecutor","thread_name":"main","message":"Database: jdbc:postgresql://localhost:5432/aiworkflow (PostgreSQL 17.10)"}
+{"@timestamp":"2026-06-27T12:06:20.9261266Z","@version":"1","level":"INFO","logg
+er_name":"org.flywaydb.core.internal.command.DbMigrate","thread_name":"main","message":"Current version of schema \"public\": 10"}
+{"@timestamp":"2026-06-27T12:06:20.934561Z","@version":"1","level":"INFO","logge
+r_name":"org.flywaydb.core.internal.command.DbMigrate","thread_name":"main","message":"Schema \"public\" is up to date. No migration necessary."}
+{"@timestamp":"2026-06-27T12:06:21.2434015Z","@version":"1","level":"INFO","logg
+er_name":"org.hibernate.orm.jpa","thread_name":"main","message":"HHH008540: Processing PersistenceUnitInfo [name: default]"}
+{"@timestamp":"2026-06-27T12:06:21.3436932Z","@version":"1","level":"INFO","logg
+er_name":"org.hibernate.orm.core","thread_name":"main","message":"HHH000001: Hibernate ORM core version 7.4.1.Final"}
+{"@timestamp":"2026-06-27T12:06:21.8294073Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo"
+,"thread_name":"main","message":"No LoadTimeWeaver setup: ignoring JPA class transformer"}
+{"@timestamp":"2026-06-27T12:06:21.9275026Z","@version":"1","level":"INFO","logg
+er_name":"org.hibernate.orm.connections.pooling","thread_name":"main","message":
+"HHH10001005: Database info:\n\tDatabase JDBC URL [jdbc:postgresql://localhost:5
+432/aiworkflow]\n\tDatabase driver: PostgreSQL JDBC Driver\n\tDatabase dialect:
+PostgreSQLDialect\n\tDatabase version: 17.10\n\tDefault catalog/schema: aiworkfl
+ow/public\n\tAutocommit mode: undefined/unknown\n\tIsolation level: READ_COMMITT
+ED [default READ_COMMITTED]\n\tJDBC fetch size: none\n\tPool: DataSourceConnecti
+onProvider\n\tMinimum pool size: undefined/unknown\n\tMaximum pool size: undefined/unknown"}
+{"@timestamp":"2026-06-27T12:06:23.275316Z","@version":"1","level":"INFO","logge
+r_name":"org.hibernate.orm.core","thread_name":"main","message":"HHH000489: No J
+TA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)"}
+{"@timestamp":"2026-06-27T12:06:23.3501444Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean","t
+hread_name":"main","message":"Initialized JPA EntityManagerFactory for persistence unit 'default'"}
+{"@timestamp":"2026-06-27T12:06:23.5421926Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.data.jpa.repository.query.QueryEnhancerFactories",
+"thread_name":"main","message":"Hibernate is in classpath; If applicable, HQL parser will be used."}
+{"@timestamp":"2026-06-27T12:06:25.6669336Z","@version":"1","level":"WARN","logg
+er_name":"org.springframework.boot.security.autoconfigure.UserDetailsServiceAuto
+Configuration","thread_name":"main","message":"\r\n\r\nUsing generated security
+password: b625faa9-a67c-479b-855c-a66d1d544179\r\n\r\nThis generated password is
+ for development use only. Your security configuration must be updated before running your application in production.\r\n"}
+{"@timestamp":"2026-06-27T12:06:25.6719122Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.security.config.annotation.authentication.configur
+ation.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerCon
+figurer","thread_name":"main","message":"Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager"}
+{"@timestamp":"2026-06-27T12:06:26.2901037Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver","
+thread_name":"main","message":"Exposing 3 endpoints beneath base path '/actuator'"}
+{"@timestamp":"2026-06-27T12:06:26.8498409Z","@version":"1","level":"INFO","logg
+er_name":"com.wajahat.aiworkflow.AiworkflowApplicationTests","thread_name":"main
+","message":"Started AiworkflowApplicationTests in 10.917 seconds (process running for 12.929)"}
+{"@timestamp":"2026-06-27T12:06:26.9615724Z","@version":"1","level":"WARN","logg
+er_name":"org.springdoc.core.events.SpringDocAppInitializer","thread_name":"main
+","message":"SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'"}
+{"@timestamp":"2026-06-27T12:06:26.9630786Z","@version":"1","level":"WARN","logg
+er_name":"org.springdoc.core.events.SpringDocAppInitializer","thread_name":"main
+","message":"SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'"}
+Mockito is currently self-attaching to enable the inline-mock-maker. This will n
+o longer work in future releases of the JDK. Please add Mockito as an agent to y
+our build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (C:\Users\Lenovo\.m2\repository\net\bytebuddy\byte-buddy-agent\1.18.10\byte-buddy-agent-1.18.10.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.03 s -- in com.wajahat.aiworkflow.AiworkflowApplicationTests
+[INFO] Running com.wajahat.aiworkflow.api.OpenApiDocumentationTest
+{"@timestamp":"2026-06-27T12:06:27.3537402Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.context.support.AnnotationConfigContextLoader
+Utils","thread_name":"main","message":"Could not detect default configuration cl
+asses for test class [com.wajahat.aiworkflow.api.OpenApiDocumentationTest]: Open
+ApiDocumentationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:27.3694316Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.api.OpenApiDocumentationTest"}
+{"@timestamp":"2026-06-27T12:06:27.3724423Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.context.support.AnnotationConfigContextLoader
+Utils","thread_name":"main","message":"Could not detect default configuration cl
+asses for test class [com.wajahat.aiworkflow.api.OpenApiDocumentationTest]: Open
+ApiDocumentationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:27.3741376Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.api.OpenApiDocumentationTest"}
+{"@timestamp":"2026-06-27T12:06:27.4138199Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:27.41482Z","@version":"1","level":"INFO","logger
+_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:27.4158027Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 1 ms"}
+{"@timestamp":"2026-06-27T12:06:27.4855006Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:27.4855006Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:27.4875273Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 2 ms"}
+{"@timestamp":"2026-06-27T12:06:28.0786967Z","@version":"1","level":"INFO","logg
+er_name":"org.springdoc.api.AbstractOpenApiResource","thread_name":"main","message":"Init duration for springdoc-openapi is: 563 ms"}
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.778 s -- in com.wajahat.aiworkflow.api.OpenApiDocumentationTest
+[INFO] Running com.wajahat.aiworkflow.auth.ApiKeyAuthenticationTest
+{"@timestamp":"2026-06-27T12:06:28.136913Z","@version":"1","level":"INFO","logge
+r_name":"org.springframework.test.context.support.AnnotationConfigContextLoaderU
+tils","thread_name":"main","message":"Could not detect default configuration cla
+sses for test class [com.wajahat.aiworkflow.auth.ApiKeyAuthenticationTest]: ApiK
+eyAuthenticationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:28.1597663Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.auth.ApiKeyAuthenticationTest"}
+{"@timestamp":"2026-06-27T12:06:28.160766Z","@version":"1","level":"INFO","logge
+r_name":"org.springframework.test.context.support.AnnotationConfigContextLoaderU
+tils","thread_name":"main","message":"Could not detect default configuration cla
+sses for test class [com.wajahat.aiworkflow.auth.ApiKeyAuthenticationTest]: ApiK
+eyAuthenticationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:28.1617669Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.auth.ApiKeyAuthenticationTest"}
+{"@timestamp":"2026-06-27T12:06:28.1790199Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:28.1790199Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:28.1813736Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 2 ms"}
+{"@timestamp":"2026-06-27T12:06:28.2568316Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:28.2568316Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:28.2589161Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 1 ms"}
+{"@timestamp":"2026-06-27T12:06:28.3575298Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:28.3575298Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:28.3599193Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 2 ms"}
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.302 s -- in com.wajahat.aiworkflow.auth.ApiKeyAuthenticationTest
+[INFO] Running com.wajahat.aiworkflow.auth.AuthServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.512 s -- in com.wajahat.aiworkflow.auth.AuthServiceTest
+[INFO] Running com.wajahat.aiworkflow.auth.JwtTokenServiceTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.113 s -- in com.wajahat.aiworkflow.auth.JwtTokenServiceTest
+[INFO] Running com.wajahat.aiworkflow.auth.SecurityAccessTest
+{"@timestamp":"2026-06-27T12:06:29.0839662Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.context.support.AnnotationConfigContextLoader
+Utils","thread_name":"main","message":"Could not detect default configuration cl
+asses for test class [com.wajahat.aiworkflow.auth.SecurityAccessTest]: SecurityA
+ccessTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:29.089511Z","@version":"1","level":"INFO","logge
+r_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrapper
+","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.aiw
+orkflow.AiworkflowApplication for test class com.wajahat.aiworkflow.auth.SecurityAccessTest"}
+{"@timestamp":"2026-06-27T12:06:29.0931468Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.context.support.AnnotationConfigContextLoader
+Utils","thread_name":"main","message":"Could not detect default configuration cl
+asses for test class [com.wajahat.aiworkflow.auth.SecurityAccessTest]: SecurityA
+ccessTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:29.0951602Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.auth.SecurityAccessTest"}
+{"@timestamp":"2026-06-27T12:06:29.1124413Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:29.1124413Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:29.1150017Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 3 ms"}
+{"@timestamp":"2026-06-27T12:06:29.148323Z","@version":"1","level":"INFO","logge
+r_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:29.1493132Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:29.1522071Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 3 ms"}
+{"@timestamp":"2026-06-27T12:06:29.3236404Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:29.3246404Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:29.3266397Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 2 ms"}
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.267 s -- in com.wajahat.aiworkflow.auth.SecurityAccessTest
+[INFO] Running com.wajahat.aiworkflow.document.DocumentValidationTest
+{"@timestamp":"2026-06-27T12:06:29.3517566Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.context.support.AnnotationConfigContextLoader
+Utils","thread_name":"main","message":"Could not detect default configuration cl
+asses for test class [com.wajahat.aiworkflow.document.DocumentValidationTest]: D
+ocumentValidationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:29.4145954Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.document.DocumentValidationTest"}
+{"@timestamp":"2026-06-27T12:06:29.4167828Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.context.support.AnnotationConfigContextLoader
+Utils","thread_name":"main","message":"Could not detect default configuration cl
+asses for test class [com.wajahat.aiworkflow.document.DocumentValidationTest]: D
+ocumentValidationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:29.4191113Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.document.DocumentValidationTest"}
+{"@timestamp":"2026-06-27T12:06:29.4335761Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:29.4341908Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:29.4365215Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 2 ms"}
+{"@timestamp":"2026-06-27T12:06:29.4499719Z","@version":"1","level":"WARN","logg
+er_name":"com.wajahat.aiworkflow.exception.GlobalExceptionHandler","thread_name"
+:"main","message":"MethodArgumentTypeMismatchException: Parameter 'workspaceId'
+has invalid value 'workspaceId'. Expected type is 'UUID' at path /api/workspaces/workspaceId/documents"}
+{"@timestamp":"2026-06-27T12:06:29.5564026Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:29.5564026Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:29.5589337Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 2 ms"}
+{"@timestamp":"2026-06-27T12:06:29.5949854Z","@version":"1","level":"WARN","logg
+er_name":"com.wajahat.aiworkflow.exception.GlobalExceptionHandler","thread_name"
+:"main","message":"IllegalArgumentException: Workspace not found at path /api/workspaces/0c7b19cc-a1a6-4f2f-95c8-6f39621683da/documents"}
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.257 s -- in com.wajahat.aiworkflow.document.DocumentValidationTest
+[INFO] Running com.wajahat.aiworkflow.event.DomainEventAsyncProcessingTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.079 s -- in com.wajahat.aiworkflow.event.DomainEventAsyncProcessingTest
+[INFO] Running com.wajahat.aiworkflow.event.DomainEventListenerTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.095 s -- in com.wajahat.aiworkflow.event.DomainEventListenerTest
+[INFO] Running com.wajahat.aiworkflow.event.DomainEventPublisherTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.098 s -- in com.wajahat.aiworkflow.event.DomainEventPublisherTest
+[INFO] Running com.wajahat.aiworkflow.event.OutboxEventProcessorTest
+{"@timestamp":"2026-06-27T12:06:30.016624Z","@version":"1","level":"WARN","logge
+r_name":"com.wajahat.aiworkflow.event.OutboxEventProcessor","thread_name":"main"
+,"message":"outbox_event_failed id=f500ad28-4a15-4d2d-9e7c-0180dd8c96c6 eventId=
+080f102a-1e91-4496-a289-e6556fdc3531 type=WORKFLOW_STARTED","stack_trace":"java.
+lang.IllegalStateException: bad payload\r\n\tat com.wajahat.aiworkflow.event.Out
+boxEventService.toDomainEvent(OutboxEventService.java:65)\r\n\tat com.wajahat.ai
+workflow.event.OutboxEventProcessor.process(OutboxEventProcessor.java:30)\r\n\ta
+t java.base/java.util.ImmutableCollections$List12.forEach(ImmutableCollections.j
+ava:681)\r\n\tat com.wajahat.aiworkflow.event.OutboxEventProcessor.processPendin
+gEvents(OutboxEventProcessor.java:24)\r\n\tat com.wajahat.aiworkflow.event.Outbo
+xEventProcessorTest.processPendingEventsShouldMarkEventFailedWhenPublishingFails
+(OutboxEventProcessorTest.java:53)\r\n\tat java.base/jdk.internal.reflect.Direct
+MethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)\r\n\tat java.ba
+se/java.lang.reflect.Method.invoke(Method.java:565)\r\n\tat org.junit.platform.c
+ommons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:701)\r\n\tat org.j
+unit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.j
+ava:502)\r\n\tat org.junit.jupiter.engine.support.MethodReflectionUtils.invoke(M
+ethodReflectionUtils.java:45)\r\n\tat org.junit.jupiter.engine.execution.MethodI
+nvocation.proceed(MethodInvocation.java:61)\r\n\tat org.junit.jupiter.engine.exe
+cution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterce
+ptorChain.java:124)\r\n\tat org.junit.jupiter.engine.extension.TimeoutExtension.
+intercept(TimeoutExtension.java:163)\r\n\tat org.junit.jupiter.engine.extension.
+TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:148)\r\n\tat org.
+junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExten
+sion.java:86)\r\n\tat org.junit.jupiter.engine.execution.InterceptingExecutableI
+nvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInv
+oker.java:123)\r\n\tat org.junit.jupiter.engine.execution.InterceptingExecutable
+Invoker.lambda$invoke$0(InterceptingExecutableInvoker.java:105)\r\n\tat org.juni
+t.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proc
+eed(InvocationInterceptorChain.java:99)\r\n\tat org.junit.jupiter.engine.executi
+on.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:66)\r\n\ta
+t org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(I
+nvocationInterceptorChain.java:47)\r\n\tat org.junit.jupiter.engine.execution.In
+vocationInterceptorChain.invoke(InvocationInterceptorChain.java:39)\r\n\tat org.
+junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(Intercepting
+ExecutableInvoker.java:104)\r\n\tat org.junit.jupiter.engine.execution.Intercept
+ingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:98)\r\n\tat org.j
+unit.jupiter.engine.execution.InterceptingExecutableInvoker.invokeVoid(Intercept
+ingExecutableInvoker.java:71)\r\n\tat org.junit.jupiter.engine.descriptor.TestMe
+thodTestDescriptor.lambda$invokeTestMethod$0(TestMethodTestDescriptor.java:219)\
+r\n\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execut
+e(ThrowableCollector.java:74)\r\n\tat org.junit.jupiter.engine.descriptor.TestMe
+thodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:215)\r\n\tat o
+rg.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTe
+stDescriptor.java:157)\r\n\tat org.junit.jupiter.engine.descriptor.TestMethodTes
+tDescriptor.execute(TestMethodTestDescriptor.java:70)\r\n\tat org.junit.platform
+.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$2(NodeTestTa
+sk.java:176)\r\n\tat org.junit.platform.engine.support.hierarchical.ThrowableCol
+lector.execute(ThrowableCollector.java:74)\r\n\tat org.junit.platform.engine.sup
+port.hierarchical.NodeTestTask.lambda$executeRecursively$1(NodeTestTask.java:166
+)\r\n\tat org.junit.platform.engine.support.hierarchical.Node.around(Node.java:1
+38)\r\n\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$e
+xecuteRecursively$0(NodeTestTask.java:164)\r\n\tat org.junit.platform.engine.sup
+port.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)\r\n\tat
+ org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(
+NodeTestTask.java:163)\r\n\tat org.junit.platform.engine.support.hierarchical.No
+deTestTask.execute(NodeTestTask.java:116)\r\n\tat java.base/java.util.ArrayList.
+forEach(ArrayList.java:1604)\r\n\tat org.junit.platform.engine.support.hierarchi
+cal.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTe
+stExecutorService.java:42)\r\n\tat org.junit.platform.engine.support.hierarchica
+l.NodeTestTask.lambda$executeRecursively$2(NodeTestTask.java:180)\r\n\tat org.ju
+nit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCol
+lector.java:74)\r\n\tat org.junit.platform.engine.support.hierarchical.NodeTestT
+ask.lambda$executeRecursively$1(NodeTestTask.java:166)\r\n\tat org.junit.platfor
+m.engine.support.hierarchical.Node.around(Node.java:138)\r\n\tat org.junit.platf
+orm.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$0(NodeTes
+tTask.java:164)\r\n\tat org.junit.platform.engine.support.hierarchical.Throwable
+Collector.execute(ThrowableCollector.java:74)\r\n\tat org.junit.platform.engine.
+support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:163)\r\n\
+tat org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTest
+Task.java:116)\r\n\tat java.base/java.util.ArrayList.forEach(ArrayList.java:1604
+)\r\n\tat org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalT
+estExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:42)\
+r\n\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$execu
+teRecursively$2(NodeTestTask.java:180)\r\n\tat org.junit.platform.engine.support
+.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)\r\n\tat org
+.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursive
+ly$1(NodeTestTask.java:166)\r\n\tat org.junit.platform.engine.support.hierarchic
+al.Node.around(Node.java:138)\r\n\tat org.junit.platform.engine.support.hierarch
+ical.NodeTestTask.lambda$executeRecursively$0(NodeTestTask.java:164)\r\n\tat org
+.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(Throwable
+Collector.java:74)\r\n\tat org.junit.platform.engine.support.hierarchical.NodeTe
+stTask.executeRecursively(NodeTestTask.java:163)\r\n\tat org.junit.platform.engi
+ne.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:116)\r\n\tat org.
+junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorSer
+vice.submit(SameThreadHierarchicalTestExecutorService.java:36)\r\n\tat org.junit
+.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(Hierarchi
+calTestExecutor.java:52)\r\n\tat org.junit.platform.engine.support.hierarchical.
+HierarchicalTestEngine.execute(HierarchicalTestEngine.java:58)\r\n\tat org.junit
+.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutio
+nOrchestrator.java:246)\r\n\tat org.junit.platform.launcher.core.EngineExecution
+Orchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:218)\r\n\tat o
+rg.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecut
+ionOrchestrator.java:179)\r\n\tat org.junit.platform.launcher.core.EngineExecuti
+onOrchestrator.execute(EngineExecutionOrchestrator.java:108)\r\n\tat org.junit.p
+latform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecuti
+onOrchestrator.java:66)\r\n\tat org.junit.platform.launcher.core.EngineExecution
+Orchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:157)\r\n\ta
+t org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExe
+cutionOrchestrator.java:65)\r\n\tat org.junit.platform.launcher.core.DefaultLaun
+cher.execute(DefaultLauncher.java:125)\r\n\tat org.junit.platform.launcher.core.
+DefaultLauncher.execute(DefaultLauncher.java:114)\r\n\tat org.junit.platform.lau
+ncher.core.DelegatingLauncher.execute(DelegatingLauncher.java:58)\r\n\tat org.ju
+nit.platform.launcher.core.InterceptingLauncher.lambda$execute$2(InterceptingLau
+ncher.java:57)\r\n\tat org.junit.platform.launcher.core.ClasspathAlignmentChecki
+ngLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.ja
+va:25)\r\n\tat org.junit.platform.launcher.core.InterceptingLauncher.execute(Int
+erceptingLauncher.java:56)\r\n\tat org.junit.platform.launcher.core.DelegatingLa
+uncher.execute(DelegatingLauncher.java:58)\r\n\tat java.base/jdk.internal.reflec
+t.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)\r\n\tat
+ java.base/java.lang.reflect.Method.invoke(Method.java:565)\r\n\tat org.apache.m
+aven.surefire.api.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.jav
+a:125)\r\n\tat org.apache.maven.surefire.junitplatform.LauncherAdapter.executeWi
+thCancellationToken(LauncherAdapter.java:68)\r\n\tat org.apache.maven.surefire.j
+unitplatform.LauncherAdapter.execute(LauncherAdapter.java:54)\r\n\tat org.apache
+.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvide
+r.java:203)\r\n\tat org.apache.maven.surefire.junitplatform.JUnitPlatformProvide
+r.invokeAllTests(JUnitPlatformProvider.java:168)\r\n\tat org.apache.maven.surefi
+re.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:136)\r\
+n\tat org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBoo
+ter.java:385)\r\n\tat org.apache.maven.surefire.booter.ForkedBooter.execute(Fork
+edBooter.java:162)\r\n\tat org.apache.maven.surefire.booter.ForkedBooter.run(For
+kedBooter.java:507)\r\n\tat org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)\r\n"}
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.153 s -- in com.wajahat.aiworkflow.event.OutboxEventProcessorTest
+[INFO] Running com.wajahat.aiworkflow.event.OutboxEventServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.313 s -- in com.wajahat.aiworkflow.event.OutboxEventServiceTest
+[INFO] Running com.wajahat.aiworkflow.tenant.TenantIsolationTest
+{"@timestamp":"2026-06-27T12:06:30.3603704Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.context.support.AnnotationConfigContextLoader
+Utils","thread_name":"main","message":"Could not detect default configuration cl
+asses for test class [com.wajahat.aiworkflow.tenant.TenantIsolationTest]: Tenant
+IsolationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:30.4818085Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.tenant.TenantIsolationTest"}
+{"@timestamp":"2026-06-27T12:06:30.4868178Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.context.support.AnnotationConfigContextLoader
+Utils","thread_name":"main","message":"Could not detect default configuration cl
+asses for test class [com.wajahat.aiworkflow.tenant.TenantIsolationTest]: Tenant
+IsolationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:30.4896739Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.tenant.TenantIsolationTest"}
+{"@timestamp":"2026-06-27T12:06:30.5130873Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.5130873Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.5181219Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 5 ms"}
+{"@timestamp":"2026-06-27T12:06:30.5780509Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.5780509Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.5805211Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 2 ms"}
+{"@timestamp":"2026-06-27T12:06:30.6872056Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.6872056Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.690547Z","@version":"1","level":"INFO","logge
+r_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 3 ms"}
+{"@timestamp":"2026-06-27T12:06:30.7571088Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.7576758Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.7593286Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 2 ms"}
+{"@timestamp":"2026-06-27T12:06:30.8102772Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.8102772Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.813143Z","@version":"1","level":"INFO","logge
+r_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 3 ms"}
+{"@timestamp":"2026-06-27T12:06:30.851049Z","@version":"1","level":"INFO","logge
+r_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.851049Z","@version":"1","level":"INFO","logge
+r_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:30.8532354Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 2 ms"}
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.535 s -- in com.wajahat.aiworkflow.tenant.TenantIsolationTest
+[INFO] Running com.wajahat.aiworkflow.workflow.WorkflowServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.709 s -- in com.wajahat.aiworkflow.workflow.WorkflowServiceTest
+[INFO] Running com.wajahat.aiworkflow.workspace.PathVariableValidationTest
+{"@timestamp":"2026-06-27T12:06:31.6225074Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.context.support.AnnotationConfigContextLoader
+Utils","thread_name":"main","message":"Could not detect default configuration cl
+asses for test class [com.wajahat.aiworkflow.workspace.PathVariableValidationTes
+t]: PathVariableValidationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:31.6606358Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.workspace.PathVariableValidationTest"}
+{"@timestamp":"2026-06-27T12:06:31.6622789Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.context.support.AnnotationConfigContextLoader
+Utils","thread_name":"main","message":"Could not detect default configuration cl
+asses for test class [com.wajahat.aiworkflow.workspace.PathVariableValidationTes
+t]: PathVariableValidationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration."}
+{"@timestamp":"2026-06-27T12:06:31.6636643Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.context.SpringBootTestContextBootstrappe
+r","thread_name":"main","message":"Found @SpringBootConfiguration com.wajahat.ai
+workflow.AiworkflowApplication for test class com.wajahat.aiworkflow.workspace.PathVariableValidationTest"}
+{"@timestamp":"2026-06-27T12:06:31.6713257Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:31.6724459Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:31.6764272Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 4 ms"}
+{"@timestamp":"2026-06-27T12:06:31.6820448Z","@version":"1","level":"WARN","logg
+er_name":"com.wajahat.aiworkflow.exception.GlobalExceptionHandler","thread_name"
+:"main","message":"MethodArgumentTypeMismatchException: Parameter 'workspaceId'
+has invalid value 'workspaceId'. Expected type is 'UUID' at path /api/workspaces/workspaceId/members"}
+{"@timestamp":"2026-06-27T12:06:31.6928853Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.boot.test.mock.web.SpringBootMockServletContext","thread_name":"main","message":"Initializing Spring TestDispatcherServlet ''"}
+{"@timestamp":"2026-06-27T12:06:31.6928853Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Initializing Servlet ''"}
+{"@timestamp":"2026-06-27T12:06:31.6954133Z","@version":"1","level":"INFO","logg
+er_name":"org.springframework.test.web.servlet.TestDispatcherServlet","thread_name":"main","message":"Completed initialization in 3 ms"}
+{"@timestamp":"2026-06-27T12:06:31.6996473Z","@version":"1","level":"WARN","logg
+er_name":"com.wajahat.aiworkflow.exception.GlobalExceptionHandler","thread_name"
+:"main","message":"MethodArgumentTypeMismatchException: Parameter 'tenantId' has
+ invalid value 'tenantId'. Expected type is 'UUID' at path /api/tenants/tenantId/workspaces"}
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /api/tenants/tenantId/workspaces
+       Parameters = {}
+          Headers = []
+             Body = <no character encoding set>
+    Session Attrs = {}
+Handler:
+             Type = com.wajahat.aiworkflow.workspace.WorkspaceController
+           Method = com.wajahat.aiworkflow.workspace.WorkspaceController#findByTenant(UUID)
+Async:
+    Async started = false
+     Async result = null
+Resolved Exception:
+             Type = org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+FlashMap:
+       Attributes = null
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Con
+trol-Request-Headers", Content-Type:"application/json", X-Content-Type-Options:"
+nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+     Content type = application/json
+             Body = {"details":{"parameter":"tenantId","value":"tenantId"},"mess
+age":"Parameter 'tenantId' has invalid value 'tenantId'. Expected type is 'UUID'
+","path":"/api/tenants/tenantId/workspaces","status":400,"timestamp":"2026-06-27T17:06:31.6996473"}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.097 s -- in com.wajahat.aiworkflow.workspace.PathVariableValidationTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 34, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  35.894 s
+[INFO] Finished at: 2026-06-27T17:06:31+05:00
+[INFO] ------------------------------------------------------------------------
